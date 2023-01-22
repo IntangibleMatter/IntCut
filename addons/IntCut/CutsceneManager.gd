@@ -1,5 +1,6 @@
 extends Node
 
+var icutils := IntCutUtils.new()
 
 func parse_cutscene(cutscene_name: String) -> Dictionary:
 	var scene_path := "res://assets/cutscenes/%s.txt" % cutscene_name
@@ -24,7 +25,7 @@ func parse_cutscene(cutscene_name: String) -> Dictionary:
 		var lines := label.split("\n") # each part of the label split into lines
 		var title := lines[0] # title of the current label
 		lines.remove_at(0) # remove the label from the rest of the cutscene
-		var tokenized := [] # the lines tokenized 
+		var tokenized : Array[PackedStringArray] = [] # the lines tokenized 
 		for line in lines:
 			tokenized.append(line.split(" ")) # split the line apart and make it into individual tokens
 		
@@ -32,7 +33,6 @@ func parse_cutscene(cutscene_name: String) -> Dictionary:
 			labeled[title] = tokenized
 		else:
 			print_debug("Cutscene parser error: label name conflict {0} in cutscene {1}. Second item with name discarded".format([title, cutscene_name]))
-			
 	
 	return labeled
 
