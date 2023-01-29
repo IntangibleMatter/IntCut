@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dtr44ctoaxdw1"
+
+[deps]
+
+files=["res://addons/IntCut/intcut_util_tr.en.translation"]
+
+source_file="res://addons/IntCut/intcut_util_tr.csv"
+dest_files=["res://addons/IntCut/intcut_util_tr.en.translation"]
+
+[params]
+
+compress=true
+delimiter=0

@@ -13,8 +13,8 @@ func parse_cutscene(cutscene_name: String) -> Dictionary:
 	if not FileAccess.file_exists(scene_path):
 		print("Couldn't load cutscene %s! File not found" % cutscene_name)
 		return {"start": [
-			["say", "game", "If you're seeing this something is very wrong."],
-			["say", "game", "Please tell the devs that your game couldn't access %s" % cutscene_name]
+			["say", "game", "cutscene_load_error_1"],
+			["say", "game", "cutscene_load_error_2"]
 			]}
 	
 	var file = FileAccess.open(scene_path, FileAccess.READ)
