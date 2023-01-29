@@ -2,8 +2,7 @@ extends Node
 
 var icutils := IntCutUtils.new()
 
-# store currently active cutscenes
-
+# store currently active cutscenes. { String cutscene_name : CutscenePlayer }
 var cutscenes : Dictionary 
 
 func parse_cutscene(cutscene_name: String) -> Dictionary:
