@@ -10,9 +10,11 @@ var actors : Dictionary
 signal scene_done(scene_name: String)
 signal action_done
 
+
 func setup(scene_name: String, scene : Dictionary) -> void:
 	cutscene_name = scene_name
 	cutscene = scene
+
 
 func cutscene_loop() -> void:
 	while not action_index == cutscene[current_label].size():
@@ -53,6 +55,7 @@ func deal_with_vars(v: String) -> String:
 	
 	return formatted
 
+
 func end_scene(actor_states: Dictionary = {}) -> void:
 	for actor in actors:
 		if actor.is_instance_valid():
@@ -61,8 +64,6 @@ func end_scene(actor_states: Dictionary = {}) -> void:
 			actor.set_state("Normal")
 	emit_signal("scene_done", cutscene_name)
 	queue_free()
-
-
 
 
 func verify_actor(actor: String) -> bool:
@@ -80,11 +81,14 @@ func verify_actor(actor: String) -> bool:
 	
 	return false
 
+
 # This is the backbone of what actually plays the cutscenes. It uses a match statement to
 # call other nodes and other functions to do whatever it needs to. 
 # If you want to change or add functionality, this is where you want to look 9 times out of 10.
 func handle_action(action: PackedStringArray) -> void:
 	match action[0]:
+		"choice": # [choice first_choice, label_to_jump_to_on_first_choice, second choice, label_to_jump_to_on_second_choice, ...]
+			pass
 		"cinebars": # [cinebars enabled]
 			CutsceneDisplay.cinebars(action[1])
 		"if": # [if, value_name, (=, <, >, !=), (value_name, value), label, ("variable", "absolute")=absolute]
@@ -122,9 +126,9 @@ func handle_action(action: PackedStringArray) -> void:
 			if verify_actor(action[1]):
 				# pass the dialogue along to the dialogue engine
 				if action.size() == 4:
-					CutsceneDisplay.say(action[1], format_dialogue(action[2]), action[3])
+					CutsceneDisplay.say(actors[action[1]], format_dialogue(action[2]), float(action[3]))
 				else:
-					CutsceneDisplay.say(action[1], format_dialogue(action[2]))
+					CutsceneDisplay.say(actors[action[1]], format_dialogue(action[2]))
 		"screenshake":
 			pass
 		"set": # [set, value_name, value]
