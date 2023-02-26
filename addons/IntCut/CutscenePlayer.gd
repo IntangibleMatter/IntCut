@@ -91,12 +91,13 @@ func handle_action(action: PackedStringArray) -> void:
 			pass
 		"cinebars": # [cinebars enabled]
 			CutsceneDisplay.cinebars(action[1])
-		"if": # [if, value_name, (=, <, >, !=), (value_name, value), label, ("variable", "absolute")=absolute]
-			pass
+		"if": # [if, value_name, (=, <, >, !=), (value_name, value), label, ("var", "abs")=absolute]
+			if action.size() == 6:
+				handle_if(action[1], action[2], action[3], action[4], action[5])
+			else:
+				handle_if(action[1], action[2], action[3], action[4])
 		"jump": # [jump, label]
-			if cutscene.has(action[1]):
-				current_label = action[1]
-				action_index = 0
+			handle_jump(action[1])
 				# next_action
 		"move": # [move, actor, duration, x, y, ("relative", "absolute")="absolute", easing=0 (in), transition=0 (linear), relative_to=actor]
 			match action.size():
@@ -124,11 +125,15 @@ func handle_action(action: PackedStringArray) -> void:
 			pass
 		"say": # [say, actor, line, duration=-1] # duration is used for non-main cutscenes or interrupted dialogue.
 			if verify_actor(action[1]):
+				var dialogue_continues : bool = next_say_is_by_actor(action[1])
 				# pass the dialogue along to the dialogue engine
 				if action.size() == 4:
-					CutsceneDisplay.say(actors[action[1]], format_dialogue(action[2]), float(action[3]))
+					CutsceneDisplay.say(actors[action[1]], format_dialogue(action[2]), dialogue_continues, float(action[3]))
 				else:
-					CutsceneDisplay.say(actors[action[1]], format_dialogue(action[2]))
+					CutsceneDisplay.say(actors[action[1]], format_dialogue(action[2]), dialogue_continues)
+				
+				# We need to wait until the dialogue line is done so they don't just
+				await CutsceneDisplay.dialogue_line_done
 		"screenshake":
 			pass
 		"set": # [set, value_name, value]
@@ -141,3 +146,41 @@ func handle_action(action: PackedStringArray) -> void:
 			await get_tree().create_timer(float(action[1]))
 	
 	emit_signal("action_done")
+
+
+func handle_jump(label) -> void:
+	if cutscene.has(label):
+				current_label = label
+				action_index = 0
+
+
+func handle_if(value_name : String, equivelance : String, comp_value: String, jump: String, comp_type = "abs") -> void:
+	var val : Variant = Global.get_blackboard_value(value_name)
+	var cval : Variant = Global.get_blackboard_value(comp_value) if comp_type == "var" else comp_value
+	
+	var output : bool
+	
+	match equivelance:
+		">":
+			output = float(val) > float(cval)
+		"<":
+			output = float(val) < float(cval)
+		"=":
+			output = str(val) == str(cval)
+	
+	if output:
+		handle_jump(jump)
+
+
+func next_say_is_by_actor(actor: String) -> bool:
+	var currlab : PackedStringArray = cutscene[current_label]
+	for i in range(action_index + 1, cutscene[current_label].size()):
+		if currlab[i][0] == "say":
+			if currlab[i][1] == actor:
+				return true
+			else:
+				return false
+		elif currlab[i][0] == "wait":
+			return false
+	
+	return false
