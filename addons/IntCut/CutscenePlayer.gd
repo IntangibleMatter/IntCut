@@ -32,8 +32,8 @@ func play_next_action() -> void:
 
 func format_dialogue(dialogue: String) -> String:
 	var translated := tr(dialogue)
-	
-	return deal_with_vars(translated)
+	translated.replace("\\n", "\n")
+	return deal_with_vars("[center]" + translated)
 
 
 func deal_with_vars(v: String) -> String:
