@@ -7,7 +7,8 @@ var scaled := false
 @onready var rich_text_label = $RichTextLabel
 
 func _ready():
-	rich_text_label.text = "[center][font_size=40]stop. look. listen. boom.[font_size=80] WAITAMINUTE"
+	rich_text_label.text = """[shake rate=10 level=5]You...
+Was this [shake rate=20 level=10]your[/shake] doing?[/shake]"""
 	waittt()
 
 func waittt():
