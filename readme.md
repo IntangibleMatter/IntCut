@@ -1,7 +1,7 @@
 # Intangible Cutscene Engine (IntCut)
 
 This is the cutscene engine that I use for my games. It's somewhat modular, easily(ish) extensible,
-and uses a readable language to write the cutscenes. 
+and uses a readable language to write the cutscenes.
 
 ## Features
 

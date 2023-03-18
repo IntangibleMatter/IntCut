@@ -6,7 +6,7 @@ var icutils := IntCutUtils.new()
 var cutscenes : Dictionary 
 
 func parse_cutscene(cutscene_name: String) -> Dictionary:
-	var scene_path := "res://assets/cutscenes/%s.txt" % cutscene_name
+	var scene_path := "res://assets/cutscenes/%s.cut.txt" % cutscene_name
 	prints("Trying to load cutscene script:", cutscene_name)
 	
 	if not FileAccess.file_exists(scene_path):

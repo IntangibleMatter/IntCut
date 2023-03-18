@@ -73,7 +73,7 @@ func verify_actor(actor: String) -> bool:
 		else:
 			return false
 	else:
-		var n : Node = get_tree().current_scene.get_node("%" + actor)
+		var n : Node = get_tree().get_nodes_in_group(actor)[0]
 		if n:
 			n.set_state("cutscene")
 			actors[actor] = n
@@ -82,9 +82,9 @@ func verify_actor(actor: String) -> bool:
 	return false
 
 
-# This is the backbone of what actually plays the cutscenes. It uses a match statement to
-# call other nodes and other functions to do whatever it needs to. 
-# If you want to change or add functionality, this is where you want to look 9 times out of 10.
+## This is the backbone of what actually plays the cutscenes. It uses a match statement to
+## call other nodes and other functions to do whatever it needs to. 
+## If you want to change or add functionality, this is where you want to look 9 times out of 10.
 func handle_action(action: PackedStringArray) -> void:
 	match action[0]:
 		"choice": # [choice first_choice, label_to_jump_to_on_first_choice, second choice, label_to_jump_to_on_second_choice, ...]
@@ -138,6 +138,8 @@ func handle_action(action: PackedStringArray) -> void:
 			pass
 		"set": # [set, value_name, value]
 			pass
+		"setpos": # [setpos, actor, x, y, position_type, relative_to]
+			pass
 		"sound":
 			pass
 		"tween":
@@ -154,13 +156,13 @@ func handle_jump(label) -> void:
 				action_index = 0
 
 
-func handle_if(value_name : String, equivelance : String, comp_value: String, jump: String, comp_type = "abs") -> void:
+func handle_if(value_name : String, equivalence : String, comp_value: String, jump: String, comp_type = "abs") -> void:
 	var val : Variant = Global.get_blackboard_value(value_name)
 	var cval : Variant = Global.get_blackboard_value(comp_value) if comp_type == "var" else comp_value
 	
 	var output : bool
 	
-	match equivelance:
+	match equivalence:
 		">":
 			output = float(val) > float(cval)
 		"<":

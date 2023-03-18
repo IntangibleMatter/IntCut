@@ -4,22 +4,25 @@ var times : float = 0
 
 var scaled := false
 
+var text_position := 0 #stores the position in the dialogue bubble
+var text_string_positon := 0 # Stores the position in the text string to deal with delays and the like
+
+
 @onready var rich_text_label = $RichTextLabel
 
-func _ready():
-	rich_text_label.text = """[shake rate=10 level=5]You...
-Was this [shake rate=20 level=10]your[/shake] doing?[/shake]"""
+func _ready() -> void:
+	rich_text_label.text = """[shake rate=20 level=5]You...
+Was this [shake rate=40 level=20]your[/shake] doing?[/shake]"""
 	waittt()
 
-func waittt():
+func waittt() -> void:
 	await get_tree().create_timer(4)
 	print("GOOO")
 	scale_dialogue_box()
 
-func _process(delta):
+func _process(delta) -> void:
 	if not scaled:
 		times += delta
-
 
 
 func scale_dialogue_box() -> void:
@@ -68,4 +71,15 @@ func scale_dialogue_box() -> void:
 	
 	scaled = true
 	print(times)
-	
+
+
+func final_text_format(txt: String) -> String:
+	# this bit of code will make it so that you the text can easily be made more accessible.
+	# Modify for however you do settings, and more wherever the fonts are.
+#	if Settings.override_text_format:
+#		#strip out all font change tags from txt
+#		if Settings.override_text_font == "OpenDyslexic":
+#			txt = "[font=\"res://assets/fonts/OpenDyslexic-Regular.otf\"]" + txt
+#		elif Settings.override_text_font == "Hyperlegible":
+#			txt = "[font=\"res://assets/fonts/Atkinson-Hyperlegible-Regular-102.otf\"]" + txt
+	return txt
