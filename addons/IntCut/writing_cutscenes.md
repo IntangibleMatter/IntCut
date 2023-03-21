@@ -183,7 +183,7 @@ to actor.)
 `music`
 
 Music is essentially a wrapper for IntAud's Music Singleton. There are so many commands that this
-has been moved to its own section, [Music](#music-commands)
+has been moved to its own section, [Music Commands](#music-commands).
 
 `play`
 
@@ -227,20 +227,40 @@ Sets a variable in the blackboard.
     - `float`: Floating Point Value
     - `bool`: Boolean
 
+`setpos`
+
+Sets an actors position.
+
+Options:
+
+- `actor`: The name of the actor that will be moving.
+- `duration`: The duration of the movement in seconds.
+- `x`: The x position that will be moved to.
+- `y`: The y position that will be moved to.
+- `position_type`: **default: abs** : The type of position specified in x and y.
+    - `abs`: The position specified is an absolute world position.
+    - `rel`: The position specified is relative to another object (by default it will be relative
+to actor)
+- `relative_to`: **optional** : The actor that the movement will be relative to. Only works if movement is rel!
+
+`sound`
+
+Sound is essentially a wrapper for IntAud's Sound Singleton. There are so many commands that this
+has been moved to its own section, [Sound Commands](#sound-commands).
+
 ```swift
-"set": # [set, value_name, value]
-    pass
-"setpos": # [setpos, actor, x, y, position_type, relative_to]
-    pass
-"sound":
-    pass
 "tween":
     pass
 "wait": # [wait, wait_time]
     await get_tree().create_timer(float(action[1]))
+"walkto": # [walkto, actor, x, y, position_type, max_time, relative_to]
 ```
 
 #### Music Commands
+
+pass
+
+#### Sound Commands
 
 pass
 
