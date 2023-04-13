@@ -7,8 +7,8 @@ extends CanvasLayer
 
 signal dialogue_line_done
 
-func cinebars(toggle: String) -> void:
+func cinebars(toggle: bool) -> void:
 	cinebars_display.toggle_bars(toggle)
 
-func say(actor: Node2D, line: String, dialogue_continues: bool, length: float = -1) -> void:
+func say(actor: Node2D, line: String, length: float) -> void:
 	pass

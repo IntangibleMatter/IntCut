@@ -106,8 +106,8 @@ make it appear more cinematic.
 Options:
 
 - `enabled`: States whether they should be turned on or off.
-    - `on`: Turns them on
-    - `off`: Turns them off
+	- `on`: Turns them on
+	- `off`: Turns them off
 
 `if`
 
@@ -118,18 +118,18 @@ Options:
 
 - `value_name`: The name of the global variable which is going to be compared.
 - `comparison_type`: The type of comparison used.
-    - `==`: Checks if the two are equal.
-    - `<`: Checks if the value is less than the comparison value.
-    - `<=`: Checks if the value is less than or equal to the comparison value.
-    - `>`: Checks if the value is greater than the comparison value.
-    - `>=`: Checks if the value is greater than or equal to the comparison value.
-    - `!=`: Checks if the value is not equal to the comparison value.
+	- `==`: Checks if the two are equal.
+	- `<`: Checks if the value is less than the comparison value.
+	- `<=`: Checks if the value is less than or equal to the comparison value.
+	- `>`: Checks if the value is greater than the comparison value.
+	- `>=`: Checks if the value is greater than or equal to the comparison value.
+	- `!=`: Checks if the value is not equal to the comparison value.
 - `comparison_value`: Will either be used as the name of a blackboard variable to be compared to
 or an absolute value to be compared to, depending on comparison_value_type.
 - `label`: The label to jump to if the comparison evaluates to true.
 - `comparison_value_type`: **default: abs** : The way comparison_value will be treated.
-    - `abs`: The command will treat comparison_value as an absolute value
-    - `var`: The command will treat comparison_value as a blackboard variable name
+	- `abs`: The command will treat comparison_value as an absolute value
+	- `var`: The command will treat comparison_value as a blackboard variable name
 
 `jump`
 
@@ -150,8 +150,8 @@ Options:
 - `x`: The x position that will be moved to.
 - `y`: The y position that will be moved to.
 - `position_type`: **default: abs** : The type of position specified in x and y.
-    - `abs`: The position specified is an absolute world position.
-    - `rel`: The position specified is relative to another object (by default it will be relative
+	- `abs`: The position specified is an absolute world position.
+	- `rel`: The position specified is relative to another object (by default it will be relative
 to actor.)
 - `easing`: **default: 0** : The easing type used. Default is ease_in. For the options see
 [Godot's easing docs](https://docs.godotengine.org/en/stable/classes/class_tween.html#enum-tween-easetype).
@@ -171,8 +171,8 @@ Options:
 - `y`: The y position that will be moved to.
 - `scale`: The scaling of the camera.
 - `position_type`: **default: abs** : The type of position specified in x and y.
-    - `abs`: The position specified is an absolute world position.
-    - `rel`: The position specified is relative to another object (by default it will be relative
+	- `abs`: The position specified is an absolute world position.
+	- `rel`: The position specified is relative to another object (by default it will be relative
 to actor.)
 - `easing`: **default: 0** : The easing type used. Default is ease_in. For the options see
 [Godot's easing docs](https://docs.godotengine.org/en/stable/classes/class_tween.html#enum-tween-easetype).
@@ -222,10 +222,10 @@ Sets a variable in the blackboard.
 - `value_name`: The name of the value.
 - `value`: The value that the variable will be set to.
 - `type`: **default: str** : The type that the value will be converted to to be saved.
-    - `str`: String
-    - `int`: Integer
-    - `float`: Floating Point Value
-    - `bool`: Boolean
+	- `str`: String
+	- `int`: Integer
+	- `float`: Floating Point Value
+	- `bool`: Boolean
 
 `setpos`
 
@@ -238,8 +238,8 @@ Options:
 - `x`: The x position that will be moved to.
 - `y`: The y position that will be moved to.
 - `position_type`: **default: abs** : The type of position specified in x and y.
-    - `abs`: The position specified is an absolute world position.
-    - `rel`: The position specified is relative to another object (by default it will be relative
+	- `abs`: The position specified is an absolute world position.
+	- `rel`: The position specified is relative to another object (by default it will be relative
 to actor)
 - `relative_to`: **optional** : The actor that the movement will be relative to. Only works if movement is rel!
 
@@ -250,9 +250,9 @@ has been moved to its own section, [Sound Commands](#sound-commands).
 
 ```swift
 "tween":
-    pass
+	pass
 "wait": # [wait, wait_time]
-    await get_tree().create_timer(float(action[1]))
+	await get_tree().create_timer(float(action[1]))
 "walkto": # [walkto, actor, x, y, position_type, max_time, relative_to]
 ```
 
