@@ -16,7 +16,6 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-Global="*res://global.gd"
 CutsceneManager="*res://addons/IntCut/CutsceneManager.gd"
 CutsceneDisplay="*res://addons/IntCut/display/CutsceneDisplay.tscn"
 

@@ -26,14 +26,23 @@ func choice(choices: Array[Dictionary]) -> void:
 func cinebars(enabled: bool) -> void:
 	CutsceneDisplay.cinebars(enabled)
 
-
-func say(actor: String, line: String, continues: bool = false, duration: float = -1): # duration is used for non-main cutscenes or interrupted dialogue.
+## `actor` is the string which is used to reference the actor.
+## `line` is the translation key of the string that's sent to the dialogue
+## box.
+## `continues` denotes whether the dialogue bubble should close or stay open 
+## to help make dialogue look smoother... so prone to breaking tho. Defaults
+## to false.
+## `pos` should use a flag from DialogueBubble.POS_FLAGS to denote any special
+## position information.
+## `duration` is used to automatically advance dialogue after a certain amount
+## of time. If it's -1 (the default) it'll stay open indefinitely.
+func say(actor: String, line: String, continues: bool = false, pos: int = 0, duration: float = -1): # duration is used for non-main cutscenes or interrupted dialogue.
 	pass
 	if verify_actor(actor):
 #		var dialogue_continues : bool = next_say_is_by_actor(actor)
 		# pass the dialogue along to the dialogue engine
 #		if action.size() == 4:
-		CutsceneDisplay.say(actors[actor], format_dialogue(line), continues, duration)
+		CutsceneDisplay.say(actors[actor], format_dialogue(line), continues, pos, duration)
 
 
 		# We need to wait until the dialogue line is done so they don't just
@@ -61,7 +70,7 @@ func deal_with_vars(v: String) -> String:
 			formatted = formatted + split_for_vars[i]
 		else:
 			# TODO: replace `Global.get_blackboard_value` with whatever you use to store the game's data that's accessed in cutscenes.
-			formatted = formatted + str(Global.get_blackboard_value(split_for_vars[i]))
+			formatted = formatted #+ str(Global.get_blackboard_value(split_for_vars[i]))
 	
 	return formatted
 

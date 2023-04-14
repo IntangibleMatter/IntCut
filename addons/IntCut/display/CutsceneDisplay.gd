@@ -10,5 +10,5 @@ signal dialogue_line_done
 func cinebars(toggle: bool) -> void:
 	cinebars_display.toggle_bars(toggle)
 
-func say(actor: Node2D, line: String, continues: bool, length: float) -> void:
+func say(actor: Node2D, line: String, continues: bool, pos: int, length: float) -> void:
 	pass
