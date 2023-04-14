@@ -27,13 +27,13 @@ func cinebars(enabled: bool) -> void:
 	CutsceneDisplay.cinebars(enabled)
 
 
-func say(actor: String, line: String, duration: float = -1): # duration is used for non-main cutscenes or interrupted dialogue.
+func say(actor: String, line: String, continues: bool = false, duration: float = -1): # duration is used for non-main cutscenes or interrupted dialogue.
 	pass
 	if verify_actor(actor):
 #		var dialogue_continues : bool = next_say_is_by_actor(actor)
 		# pass the dialogue along to the dialogue engine
 #		if action.size() == 4:
-		CutsceneDisplay.say(actors[actor], format_dialogue(line), duration)
+		CutsceneDisplay.say(actors[actor], format_dialogue(line), continues, duration)
 
 
 		# We need to wait until the dialogue line is done so they don't just
@@ -96,3 +96,11 @@ func get_actor(actor: String) -> Node:
 		return actors[actor]
 	else:
 		return null
+
+
+func jump(label: String) -> void:
+	var callable := Callable(self, label)
+	if callable.is_valid():
+		callable.call()
+	else:
+		return
