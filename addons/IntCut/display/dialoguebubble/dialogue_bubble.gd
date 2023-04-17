@@ -109,7 +109,7 @@ func final_text_format(txt: String) -> String:
 
 func calculate_bubble_location() -> Vector2:
 	var pos : Vector2 = icutils.get_actor_top_center(speaker)
-	if pos_flag == POS_FLAGS.FORCE_BOTTOM or pos.y > icutils.get_cam_center().y:
+	if pos_flag == POS_FLAGS.FORCE_BOTTOM or pos.y < icutils.get_cam_center(Vector2(0, -0.166)).y:
 		# put the dialogue box in the bottom half of the screen
 		pass
 	else:
