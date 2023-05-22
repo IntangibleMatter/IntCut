@@ -6,6 +6,7 @@ extends Node
 ## and work with great cutscenes!
 
 var actors: Dictionary
+var icutils := IntCutUtils.new()
 signal scene_done()
 
 ## OVERRIDE THIS FUNCTION!!
@@ -48,31 +49,8 @@ func say(actor: String, line: String, continues: bool = false, pos: int = 0, dur
 		# We need to wait until the dialogue line is done so they don't just
 		await CutsceneDisplay.dialogue_line_done
 
-
 func format_dialogue(dialogue: String) -> String:
-	var translated := tr(dialogue)
-	translated.replace("\\n", "\n")
-	return deal_with_vars("[center]" + translated)
-
-
-func deal_with_vars(v: String) -> String:
-	var formatted : String
-	
-	var split_for_vars: PackedStringArray
-	for line in v.split("{{"):
-		split_for_vars.append_array(line.split("}}"))
-	
-	if split_for_vars.size() == 1:
-		return split_for_vars[0]
-	
-	for i in range(split_for_vars.size()):
-		if i % 2 == 0:
-			formatted = formatted + split_for_vars[i]
-		else:
-			# TODO: replace `Global.get_blackboard_value` with whatever you use to store the game's data that's accessed in cutscenes.
-			formatted = formatted #+ str(Global.get_blackboard_value(split_for_vars[i]))
-	
-	return formatted
+	return "center" + icutils.format_text(dialogue)
 
 
 func end_scene(actor_states: Dictionary = {}) -> void:
