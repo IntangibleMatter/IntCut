@@ -29,8 +29,7 @@ var corner_scale : float = 16
 
 func _ready() -> void:
 	bubble_rect = Rect2(calculate_bubble_location(), Vector2.ZERO)
-	rich_text_label.text = """[shake rate=20 level=5]You...
-Was this [shake rate=40 level=20]your[/shake] doing?[/shake]"""
+	rich_text_label.text = """[center]You've tried. Meds aren't working. Doctor's test said so. Still at a ninety despite these things. . . . . . . . . . . . . . . . . . . . . . . . . . We both know you've tried that. I'm still here, aren't I? Louder than ever."""
 	waittt()
 
 func waittt() -> void:
@@ -44,50 +43,13 @@ func _process(delta) -> void:
 
 
 func scale_dialogue_box() -> void:
-	var start_size : Vector2 = rich_text_label.size
-	var line_height := start_size.y/4
-	print(line_height)
-	
-	for i in range(3):
-		prints("y", rich_text_label.size)
-		rich_text_label.size.y -= line_height
-		await get_tree().process_frame
-		if rich_text_label.size.y < start_size.y:
-			start_size.y = rich_text_label.size.y
-		else:
-			break
-	
-#	var one_line : bool = rich_text_label.size.y < line_height*2
-	
-	for i in range(4):
-		prints(4, rich_text_label.size)
-		rich_text_label.size.x /= 2
-		await get_tree().process_frame
-		if rich_text_label.size.y > start_size.y:
-#			if not one_line:
-			rich_text_label.size.x *= 2
-#			if one_line:
-#				start_size.y = rich_text_label.size.y
-			start_size.x = rich_text_label.size.x
-			await get_tree().process_frame
-			rich_text_label.size.y = start_size.y
-			break
-	
-	await get_tree().process_frame
-	
-	for i in range(7):
-		prints(3, rich_text_label.size)
-		var curr_size : float = rich_text_label.size.x
-		rich_text_label.size.x -= floor(rich_text_label.size.x/8)
-		await get_tree().process_frame
-		if rich_text_label.size.y > start_size.y:
-			rich_text_label.size.x += floor(curr_size/8)
-			start_size.x = rich_text_label.size.x
-			await get_tree().process_frame
-			rich_text_label.size.y = 0
-			break
-	
-	scaled = true
+	rich_text_label.size.x = rich_text_label.get_content_width()
+	rich_text_label.size.y = rich_text_label.get_content_height()
+	if rich_text_label.size.x > get_viewport_rect().size.x:
+		rich_text_label.size.x = get_viewport_rect().size.x - (get_viewport_rect().size.x / 10)
+		rich_text_label.size.x = rich_text_label.get_content_width()
+		rich_text_label.size.y = rich_text_label.get_content_height()
+
 	
 	var tween := create_tween()
 	tween.tween_property(self, "bubble_rect", Rect2(Vector2.ZERO, rich_text_label.size), 0.2)
@@ -100,6 +62,9 @@ func final_text_format(txt: String) -> String:
 	# Modify for however you do settings, and more wherever the fonts are.
 #	if Settings.override_text_format:
 #		#strip out all font change tags from txt
+#		var regex = RegEx.new()
+#		regex.compile("\\[font.*\\].*\\[\\/font\\]")
+#		txt = regex.sub(txt, "", true)
 #		if Settings.override_text_font == "OpenDyslexic":
 #			txt = "[font=\"res://assets/fonts/OpenDyslexic-Regular.otf\"]" + txt
 #		elif Settings.override_text_font == "Hyperlegible":
@@ -108,6 +73,8 @@ func final_text_format(txt: String) -> String:
 
 
 func calculate_bubble_location() -> Vector2:
+	return Vector2(600, 600)
+	pass
 	var pos : Vector2 = icutils.get_actor_top_center(speaker)
 	if pos_flag == POS_FLAGS.FORCE_BOTTOM or pos.y < icutils.get_cam_center(Vector2(0, -0.166)).y:
 		# put the dialogue box in the bottom half of the screen
