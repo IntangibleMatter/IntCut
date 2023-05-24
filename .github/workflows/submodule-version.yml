@@ -1,0 +1,24 @@
+name: submodule version
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+
+jobs:
+  doshit:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: refactor
+        run: mv *.md addons/IntCut/
+      
+      - name: remove
+        run: rm -rf .github/ .gitattributes .gitignore icon.svg icon.svg.import project.godot
+      
+      - name: movetoroot
+        run: mv addons/IntCut/*
+
+      - name: cleanup
+        run: rm -rf addons/
