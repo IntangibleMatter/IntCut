@@ -20,7 +20,7 @@ jobs:
         run: rm -rf .github/ .gitattributes .gitignore icon.svg icon.svg.import project.godot
       
       - name: movetoroot
-        run: mv addons/IntCut/*
+        run: mv addons/IntCut/* .
 
       - name: cleanup
         run: rm -rf addons/
