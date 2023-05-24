@@ -11,14 +11,16 @@ jobs:
   doshit:
     runs-on: ubuntu-22.04
     steps:
+      - uses: actions/checkout@v3
+
       - name: refactor
-        run: cd ../.. && ls #&& mv 'readme.md' 'addons/IntCut/'
+        run: mv readme.md addons/IntCut/
       
       - name: remove
         run: rm -rf .github/ .gitattributes .gitignore icon.svg icon.svg.import project.godot
       
       - name: movetoroot
-        run: mv 'addons/IntCut/*'
+        run: mv addons/IntCut/*
 
       - name: cleanup
         run: rm -rf addons/
