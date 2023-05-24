@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - name: refactor
-        run: cd .. && echo * #&& mv 'readme.md' 'addons/IntCut/'
+        run: cd ../.. && ls #&& mv 'readme.md' 'addons/IntCut/'
       
       - name: remove
         run: rm -rf .github/ .gitattributes .gitignore icon.svg icon.svg.import project.godot
