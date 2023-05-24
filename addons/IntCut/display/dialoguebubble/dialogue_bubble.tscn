@@ -12,12 +12,10 @@ script = ExtResource("1_86hkd")
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
-offset_right = 960.0
-offset_bottom = 220.0
+offset_right = 1.0
 mouse_filter = 2
 theme_override_font_sizes/normal_font_size = 40
 bbcode_enabled = true
-text = "[font_size=40]This was a triumph. I'm making a note here: Huge success. It's hard to overstate my satisfacion. Aperture science. We do what we must because we can. For the good of all of us except the ones "
 fit_content = true
 visible_characters_behavior = 1
 
