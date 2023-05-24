@@ -1,4 +1,0 @@
-[submodule "IntCut"]
-	path = addons/IntCut
-	url = https://github.com/IntangibleMatter/IntCut.git
-	branch = submodule-version
