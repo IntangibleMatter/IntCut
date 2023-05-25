@@ -23,7 +23,7 @@ jobs:
         run: mv readme.md addons/IntCut/
       
       - name: remove
-        run: rm -rf .github/ .gitattributes .gitignore icon.svg icon.svg.import project.godot
+        run: rm -rf !addons
       
       - name: movetoroot
         run: mv addons/IntCut/* .
