@@ -3,8 +3,6 @@ extends Control
 
 enum POS_FLAGS {DEFAULT, FORCE_TOP, FORCE_BOTTOM}
 
-var times : float = 0
-
 var scaled := false
 
 var text_position := 0 #stores the position in the dialogue bubble
@@ -29,7 +27,7 @@ var corner_scale : float = 16
 
 func _ready() -> void:
 	bubble_rect = Rect2(calculate_bubble_location(), Vector2.ZERO)
-	rich_text_label.text = """[center]You've tried. Meds aren't working. Doctor's test said so. Still at a ninety despite these things. . . . . . . . . . . . . . . . . . . . . . . . . . We both know you've tried that. I'm still here, aren't I? Louder than ever."""
+	rich_text_label.text = """[center]Is it [tornado radius=4 freq=5]really[/tornado] that noticeable?"""
 	waittt()
 
 func waittt() -> void:
@@ -37,25 +35,22 @@ func waittt() -> void:
 	print("GOOO")
 	scale_dialogue_box()
 
-func _process(delta) -> void:
-	if not scaled:
-		times += delta
-
 
 func scale_dialogue_box() -> void:
 	rich_text_label.size.x = rich_text_label.get_content_width()
+	await get_tree().process_frame
 	rich_text_label.size.y = rich_text_label.get_content_height()
+	print(rich_text_label.size)
+	print(rich_text_label.get_content_height())
 	if rich_text_label.size.x > get_viewport_rect().size.x:
 		rich_text_label.size.x = get_viewport_rect().size.x - (get_viewport_rect().size.x / 10)
 		rich_text_label.size.x = rich_text_label.get_content_width()
+		await get_tree().process_frame
 		rich_text_label.size.y = rich_text_label.get_content_height()
 
 	
 	var tween := create_tween()
 	tween.tween_property(self, "bubble_rect", Rect2(Vector2.ZERO, rich_text_label.size), 0.2)
-	
-	print(times)
-
 
 func final_text_format(txt: String) -> String:
 	# this bit of code will make it so that you the text can easily be made more accessible.
