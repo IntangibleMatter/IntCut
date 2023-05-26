@@ -23,15 +23,18 @@ jobs:
         run: mv readme.md addons/IntCut/
       
       - name: remove
-        run: rm -rf .github/ .gitattributes .gitignore icon.svg icon.svg.import project.godot
+        run: rm -rf !addons
       
       - name: movetoroot
         run: mv addons/IntCut/* .
 
       - name: cleanup
         run: rm -rf addons/
+      
+      - name: gitshit
+        run: git add -A
 
-      - name: deploy #        uses: peaceiris/actions-gh-pages@v3
+      - name: deploy
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           branch: submodule-version
