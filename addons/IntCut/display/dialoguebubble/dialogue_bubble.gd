@@ -27,7 +27,9 @@ var corner_scale : float = 16
 
 func _ready() -> void:
 	bubble_rect = Rect2(calculate_bubble_location(), Vector2.ZERO)
-	rich_text_label.text = """[center]Is it [tornado radius=4 freq=5]really[/tornado] that noticeable?"""
+	rich_text_label.text = """[center][shake rate=20 level=5][font_size=28]Shut up.[/font_size][/shake]
+	[shake rate=30 level=10][font_size=52]Shut up.[/font_size][/shake]
+	[shake rate=40 level=2000][font_size=70]SHUT UP![/font_size][/shake]"""
 	waittt()
 
 func waittt() -> void:
