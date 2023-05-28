@@ -23,6 +23,20 @@ of Godot.
 
 IntCut has the ability to use variables and the like in dialogue.
 
+#### Special Characters
+
+There are some character that IntCut treats differently for various reasons.
+The following is a list of the characters and what they do.
+
+- `\n`
+    - the string `\n` (or just a regular newline) will be seen as a newline by 
+    IntCut's text parser.
+- `|`
+    - The pipe character (`|`) is used to represent a pause in the dialogue.
+    The pause is 0.1 seconds long, so if you had a dialogue line which was
+    written as `"Oh...||| I see."`, there would be a 0.3 second pause after
+    the elipsis.
+
 #### Variables 
 
 To use variables in dialogue, surround the string used to identify the variable 
@@ -45,7 +59,7 @@ could do the following in your code:
 ## PLEASE NOTE THAT THIS IS PSEUDOCODE. THE FUNCTION HAS MORE PARAMETERS
 ## AND YOU SHOULD REFER TO THE DOCUMENTATION FOR SAY INSTEAD OF THIS SNIPPET!
 
-say("Whoa... that's... {0}{1} really funny, dude!", [Callable(play_sound, "laugh.ogg"), Callale(play_anim, "laugh"])
+say("Whoa... that's... {0}{1} really funny, dude!", [Callable(play_sound, "laugh.ogg"), Callable(play_anim, "laugh"])
 ```
 
 ## Basic functions
