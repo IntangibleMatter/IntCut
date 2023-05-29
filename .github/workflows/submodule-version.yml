@@ -23,7 +23,7 @@ jobs:
         run: mv readme.md addons/IntCut/
       
       - name: remove
-        run: rm -rf !addons
+        run: rm -rf !(addons|LICENSE)
       
       - name: movetoroot
         run: mv addons/IntCut/* .

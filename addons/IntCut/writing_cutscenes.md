@@ -62,11 +62,20 @@ could do the following in your code:
 say("Whoa... that's... {0}{1} really funny, dude!", [Callable(play_sound, "laugh.ogg"), Callable(play_anim, "laugh"])
 ```
 
-## Basic functions
+## Functions
 
-pass
+### Flow
 
-## Advanced functions
+#### jump
+
+Moves control flow to another function in the cutscene.
+
+**params**
+
+- label: String
+    - the name of the function to jump to
+
+
 
 pass
 
