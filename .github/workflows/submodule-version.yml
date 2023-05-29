@@ -27,6 +27,7 @@ jobs:
         run: | 
           shopt -s extglob
           rm -rf !(addons|LICENSE)
+          ls
       
       - name: movetoroot
         run: mv addons/IntCut/* .
