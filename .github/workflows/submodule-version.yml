@@ -23,6 +23,7 @@ jobs:
         run: mv readme.md addons/IntCut/
       
       - name: remove
+        shell: bash
         run: | 
           shopt -s extglob
           rm -rf !(addons|LICENSE)
