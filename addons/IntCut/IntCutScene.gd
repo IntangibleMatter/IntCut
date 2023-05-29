@@ -9,23 +9,39 @@ var actors: Dictionary
 var icutils := IntCutUtils.new()
 signal scene_done()
 
+## should be set to true if the cutscene is skipped. Best way to handle it. Sorry. :/
+var was_skipped : bool = false
+
+## default functions. Please override all of them.
+
 ## OVERRIDE THIS FUNCTION!!
 ## This function will be called at the beginning of a cutscene, and cutscenes
 ## expect to branch out from here. Just letting you know.
 func start() -> void:
 	end_scene()
 
+
+## OVERRIDE THIS FUNCTION!
+## This function should be called when a cutscene ends, and it is *highly*
+## recommended to check if was_skipped is true.
+func end_scene() -> void: # actor_states: Dictionary = {}) -> void:
+	if was_skipped:
+		pass
+#	for actor in actors:
+#		if actors[actor].is_instance_valid():
+#			if actor_states.has(actor):
+#				get_actor(actor).set_state(actor_states[actor])
+#			actor.set_state("Normal")
+#	emit_signal("scene_done")
+#	queue_free()
 ## Allows a choice to be made by the player. Supports up to (TBD) options.
 ## The choice will be displayed in the order that they appear in the array.
 ## The dictionaries should be formatted as the following:
 ##
 ## { "title": "<translation_key>", "jump": "<function_to_jump_to>"}
-func choice(choices: Array[Dictionary]) -> void:
-	pass
 
+## Cutscene action functions.
 
-func cinebars(enabled: bool) -> void:
-	CutsceneDisplay.cinebars(enabled)
 
 ## `actor` is the string which is used to reference the actor.
 ## `line` is the translation key of the string that's sent to the dialogue
@@ -49,18 +65,25 @@ func say(actor: String, line: String, continues: bool = false, pos: int = 0, dur
 		# We need to wait until the dialogue line is done so they don't just
 		await CutsceneDisplay.dialogue_line_done
 
+func choice(choices: Array[Dictionary]) -> void:
+	pass
+
+
+func cinebars(enabled: bool) -> void:
+	CutsceneDisplay.cinebars(enabled)
+
+
+func jump(label: String) -> void:
+	var callable := Callable(self, label)
+	if callable.is_valid():
+		callable.call()
+	else:
+		return
+
+## util functions
+
 func format_dialogue(dialogue: String) -> String:
 	return "center" + icutils.format_text(dialogue)
-
-
-func end_scene(actor_states: Dictionary = {}) -> void:
-	for actor in actors:
-		if actors[actor].is_instance_valid():
-			if actor_states.has(actor):
-				get_actor(actor).set_state(actor_states[actor])
-			actor.set_state("Normal")
-	emit_signal("scene_done")
-	queue_free()
 
 
 func verify_actor(actor: String) -> bool:
@@ -84,10 +107,3 @@ func get_actor(actor: String) -> Node:
 	else:
 		return null
 
-
-func jump(label: String) -> void:
-	var callable := Callable(self, label)
-	if callable.is_valid():
-		callable.call()
-	else:
-		return

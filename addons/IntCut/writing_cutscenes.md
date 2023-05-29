@@ -64,7 +64,48 @@ say("Whoa... that's... {0}{1} really funny, dude!", [Callable(play_sound, "laugh
 
 ## Functions
 
+### Cutscene actions
+
+#### say
+
+**params**
+
+- actor: String
+    - The string used to refer to the actor in the cutscene.
+- line: String
+    - The translation key for the line
+- continues: bool = false
+    - Sets whether the dialogue box should stay open after this line. Super
+    janky solution to solve the problem of continuing the same dialogue.
+- pos: int = 0
+    - Sets any position display flags for the dialogue box. 0 is default.
+        - 0 -> automatic positioning
+        - 1 -> force box to top
+        - 2 -> force box to bottom
+- callables: Array[Callable]
+    - An array of callables. They can be triggered at any point in the 
+    dialogue. If you want to bypass this option, set it to an empty array.
+- duration: float = -1
+    - Sets the dration that the dialogue bubble will be open. Used for dialogue
+    which progresses automatically, is interrupted, or is part of a non-player
+    controlled cutscene.
+
+#### choice
+
+Gives a choice to the user. Can split in any number of directions.
+
+**params**
+
+- choices: Array[Dictionary]
+    - dictionary must have the following format:
+        - `{tr_string: string, label: string}`
+            - tr_string is the translation string used for the dialogue option
+            - label is the label which will be jumped to if the choice is
+            selected
+
 ### Flow
+
+These functions change the flow of the cutscene in some way or another.
 
 #### jump
 
@@ -75,7 +116,4 @@ Moves control flow to another function in the cutscene.
 - label: String
     - the name of the function to jump to
 
-
-
-pass
 
