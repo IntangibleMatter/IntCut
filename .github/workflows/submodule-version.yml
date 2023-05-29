@@ -35,7 +35,7 @@ jobs:
         run: rm -rf addons/
       
       - name: gitshit
-        run: git add -A && git commit -a -m "gitshit"
+        run: git add -A && git stash 
 
       - name: deploy
         uses: stefanzweifel/git-auto-commit-action@v4
