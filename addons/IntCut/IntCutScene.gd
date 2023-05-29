@@ -34,11 +34,6 @@ func end_scene() -> void: # actor_states: Dictionary = {}) -> void:
 #			actor.set_state("Normal")
 #	emit_signal("scene_done")
 #	queue_free()
-## Allows a choice to be made by the player. Supports up to (TBD) options.
-## The choice will be displayed in the order that they appear in the array.
-## The dictionaries should be formatted as the following:
-##
-## { "title": "<translation_key>", "jump": "<function_to_jump_to>"}
 
 ## Cutscene action functions.
 
@@ -65,6 +60,11 @@ func say(actor: String, line: String, continues: bool = false, pos: int = 0, dur
 		# We need to wait until the dialogue line is done so they don't just
 		await CutsceneDisplay.dialogue_line_done
 
+## Allows a choice to be made by the player. Supports up to (TBD) options.
+## The choice will be displayed in the order that they appear in the array.
+## The dictionaries should be formatted as the following:
+##
+## { "title": "<translation_key>", "jump": "<function_to_jump_to>"}
 func choice(choices: Array[Dictionary]) -> void:
 	pass
 
