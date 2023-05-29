@@ -40,10 +40,8 @@ jobs:
           git config user.name "$(git log -n 1 --pretty=format:%an)"
           git config user.email "$(git log -n 1 --pretty=format:%ae)"
           git add -A
-          git status
           git commit -m "gitshit"
-          git status
-          ls
+          git push origin HEAD:submodule-version
 
       - name: deploy
         uses: stefanzweifel/git-auto-commit-action@v4
