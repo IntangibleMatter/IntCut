@@ -18,6 +18,7 @@ fit_content = true
 visible_characters_behavior = 1
 
 [node name="ColorRect" type="ColorRect" parent="RichTextLabel"]
+visible = false
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15

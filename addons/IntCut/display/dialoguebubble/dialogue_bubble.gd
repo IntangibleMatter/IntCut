@@ -9,7 +9,9 @@ var text_position := 0 #stores the position in the dialogue bubble
 var text_string_positon := 0 # Stores the position in the text string to deal with delays and the like
 
 var bubble_rect: Rect2
-var bubble_origin_points : PackedVector2Array
+var bubble_points_base : PackedVector2Array # points which displayed bubble is based on. Doesn't change.
+var bubble_points : PackedVector2Array # Displayed points. Updates.
+var bubble_colour := Color.BLACK
 
 var corner_points_template : PackedVector2Array = [
 	Vector2(-1.5, 2.5),
@@ -19,6 +21,7 @@ var corner_points_template : PackedVector2Array = [
 ]
 var corner_scale : float = 16
 
+@export var text : PackedStringArray
 @export var speaker: Node2D
 @export var pos_flag : POS_FLAGS
 
@@ -31,6 +34,10 @@ func _ready() -> void:
 	[shake rate=30 level=10][font_size=52]Shut up.[/font_size][/shake]
 	[shake rate=40 level=2000][font_size=70]SHUT UP![/font_size][/shake]"""
 	waittt()
+
+func _process(delta: float) -> void:
+	update_bubble_points(delta)
+	queue_redraw()
 
 func waittt() -> void:
 	await get_tree().create_timer(4)
@@ -83,7 +90,16 @@ func calculate_bubble_location() -> Vector2:
 
 
 func draw_bubble() -> void:
+	draw_colored_polygon(bubble_points, bubble_colour)
+
+
+func draw_speech_line() -> void:
 	pass
+
+
+func _draw() -> void:
+	draw_bubble()
+	draw_speech_line()
 
 
 func rotate_and_scale_bubble_corner(turns: int) -> PackedVector2Array:
@@ -102,3 +118,11 @@ func rotate_and_scale_bubble_corner(turns: int) -> PackedVector2Array:
 			for point in corner.size():
 				corner[point].y = -corner[point].y
 	return []
+
+
+func update_bubble_points(delta: float) -> void:
+	pass
+
+
+func update_speech_line() -> void:
+	pass

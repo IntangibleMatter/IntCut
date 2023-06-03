@@ -48,7 +48,21 @@ func end_scene() -> void: # actor_states: Dictionary = {}) -> void:
 ## position information.
 ## `duration` is used to automatically advance dialogue after a certain amount
 ## of time. If it's -1 (the default) it'll stay open indefinitely.
-func say(actor: String, line: String, continues: bool = false, pos: int = 0, duration: float = -1): # duration is used for non-main cutscenes or interrupted dialogue.
+func say(actor: String, line: String, continues: bool = false, pos: int = 0, callables: Array[Callable] = [] duration: float = -1): # duration is used for non-main cutscenes or interrupted dialogue.
+	pass
+	if verify_actor(actor):
+#		var dialogue_continues : bool = next_say_is_by_actor(actor)
+		# pass the dialogue along to the dialogue engine
+#		if action.size() == 4:
+		CutsceneDisplay.say(actors[actor], format_dialogue(line), continues, pos, callables, duration)
+
+
+		# We need to wait until the dialogue line is done so they don't just
+		await CutsceneDisplay.dialogue_line_done
+
+
+
+func say_multi(actor: String, lines: PackedStringArray, continues: bool = false, pos: PackedInt32Array = 0, duration: float = -1): # duration is used for non-main cutscenes or interrupted dialogue.
 	pass
 	if verify_actor(actor):
 #		var dialogue_continues : bool = next_say_is_by_actor(actor)
@@ -59,6 +73,7 @@ func say(actor: String, line: String, continues: bool = false, pos: int = 0, dur
 
 		# We need to wait until the dialogue line is done so they don't just
 		await CutsceneDisplay.dialogue_line_done
+
 
 ## Allows a choice to be made by the player. Supports up to (TBD) options.
 ## The choice will be displayed in the order that they appear in the array.

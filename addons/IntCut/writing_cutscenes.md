@@ -36,6 +36,14 @@ The following is a list of the characters and what they do.
     The pause is 0.1 seconds long, so if you had a dialogue line which was
     written as `"Oh...||| I see."`, there would be a 0.3 second pause after
     the elipsis.
+- `` ` ``
+	- the backtick character (`` ` ``) is used to separate a single message
+	into multiple messages. Primarily aimed at translations, but could make
+	writing longwinded monologues that don't get interrupted a bit easier.
+- `^`
+	- The caret character (`^`) is used to indicate that a message should be
+	interrupted at this point. Can be used for autoadvancing dialogue, or
+	allowing a character to be interrupted.
 
 #### Variables 
 
