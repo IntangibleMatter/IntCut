@@ -25,11 +25,16 @@ var corner_scale : float = 16
 @export var speaker: Node2D
 @export var pos_flag : POS_FLAGS
 
+@export var bubble_corner_size := 16
+@export var bubble_point_move_scale := 16
+@export var bubble_padding := 16
+
 @onready var rich_text_label = $RichTextLabel
 @onready var icutils := IntCutUtils.new()
 
 func _ready() -> void:
 	bubble_rect = Rect2(calculate_bubble_location(), Vector2.ZERO)
+	calculate_bubble_points()
 	rich_text_label.text = """[center][shake rate=20 level=5][font_size=28]Shut up.[/font_size][/shake]
 	[shake rate=30 level=10][font_size=52]Shut up.[/font_size][/shake]
 	[shake rate=40 level=2000][font_size=70]SHUT UP![/font_size][/shake]"""
@@ -37,6 +42,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	update_bubble_points(delta)
+	update_speech_line()
 	queue_redraw()
 
 func waittt() -> void:
@@ -56,14 +62,14 @@ func scale_dialogue_box() -> void:
 		rich_text_label.size.x = rich_text_label.get_content_width()
 		await get_tree().process_frame
 		rich_text_label.size.y = rich_text_label.get_content_height()
-
 	
 	var tween := create_tween()
 	tween.tween_property(self, "bubble_rect", Rect2(Vector2.ZERO, rich_text_label.size), 0.2)
+	calculate_bubble_points()
 
 func final_text_format(txt: String) -> String:
-	# this bit of code will make it so that you the text can easily be made more accessible.
-	# Modify for however you do settings, and more wherever the fonts are.
+#	# this bit of code will make it so that you the text can easily be made more accessible.
+#	# Modify for however you do settings, and more wherever the fonts are.
 #	if Settings.override_text_format:
 #		#strip out all font change tags from txt
 #		var regex = RegEx.new()
@@ -74,6 +80,10 @@ func final_text_format(txt: String) -> String:
 #		elif Settings.override_text_font == "Hyperlegible":
 #			txt = "[font=\"res://assets/fonts/Atkinson-Hyperlegible-Regular-102.otf\"]" + txt
 	return txt
+
+
+func calculate_bubble_data() -> void:
+	calculate_bubble_location()
 
 
 func calculate_bubble_location() -> Vector2:
@@ -89,7 +99,15 @@ func calculate_bubble_location() -> Vector2:
 	return pos
 
 
+func calculate_bubble_points() -> void:
+	bubble_points_base = []
+	var temp_points : PackedVector2Array = []
+	for i in 4:
+		temp_points = offset_bubble_points(i)
+		bubble_points_base.append_array(temp_points)
+
 func draw_bubble() -> void:
+	print(bubble_points)
 	draw_colored_polygon(bubble_points, bubble_colour)
 
 
@@ -100,6 +118,27 @@ func draw_speech_line() -> void:
 func _draw() -> void:
 	draw_bubble()
 	draw_speech_line()
+
+func offset_bubble_points(corner: int) -> PackedVector2Array:
+	var temp_points : PackedVector2Array = rotate_and_scale_bubble_corner(corner)
+	match corner:
+		0:
+			for point in temp_points.size():
+				temp_points[point].x -= bubble_padding
+				temp_points[point].y -= bubble_padding
+		1:
+			for point in temp_points.size():
+				temp_points[point].x += bubble_padding + bubble_rect.size.x
+				temp_points[point].y -= bubble_padding
+		2:
+			for point in temp_points.size():
+				temp_points[point].x += bubble_padding + bubble_rect.size.x
+				temp_points[point].y += bubble_padding + bubble_rect.size.y
+		3:
+			for point in temp_points.size():
+				temp_points[point].x -= bubble_padding
+				temp_points[point].y += bubble_padding + bubble_rect.size.y
+	return temp_points
 
 
 func rotate_and_scale_bubble_corner(turns: int) -> PackedVector2Array:
@@ -117,11 +156,22 @@ func rotate_and_scale_bubble_corner(turns: int) -> PackedVector2Array:
 		3: # flip v
 			for point in corner.size():
 				corner[point].y = -corner[point].y
-	return []
+	for point in corner.size():
+		corner[point] = corner[point] * bubble_corner_size
+	return corner
 
 
 func update_bubble_points(delta: float) -> void:
-	pass
+	if bubble_points.is_empty():
+		if not bubble_points_base.is_empty():
+			bubble_points = bubble_points_base
+		else:
+			return
+	for point in bubble_points_base.size():
+		bubble_points[point] = Vector2(
+			bubble_point_move_scale * sin(bubble_points_base[point].x + point + delta),
+			bubble_point_move_scale * cos(bubble_points_base[point].y + point + delta)
+			)
 
 
 func update_speech_line() -> void:
