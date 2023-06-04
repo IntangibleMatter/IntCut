@@ -19,14 +19,14 @@ var corner_points_template : PackedVector2Array = [
 	Vector2(0.5, -0.5),
 	Vector2(2.5, -1.5)
 ]
-var corner_scale : float = 16
+var corner_scale : float = 1
 
 @export var text : PackedStringArray
 @export var speaker: Node2D
 @export var pos_flag : POS_FLAGS
 
-@export var bubble_corner_size := 16
-@export var bubble_point_move_scale := 16
+@export var bubble_corner_size := 1
+@export var bubble_point_move_scale := 2
 @export var bubble_padding := 16
 
 @onready var rich_text_label = $RichTextLabel
@@ -34,10 +34,8 @@ var corner_scale : float = 16
 
 func _ready() -> void:
 	bubble_rect = Rect2(calculate_bubble_location(), Vector2.ZERO)
-	calculate_bubble_points()
-	rich_text_label.text = """[center][shake rate=20 level=5][font_size=28]Shut up.[/font_size][/shake]
-	[shake rate=30 level=10][font_size=52]Shut up.[/font_size][/shake]
-	[shake rate=40 level=2000][font_size=70]SHUT UP![/font_size][/shake]"""
+	calculate_bubble_points(bubble_rect)
+	rich_text_label.text = """[center]Hi"""
 	waittt()
 
 func _process(delta: float) -> void:
@@ -63,9 +61,10 @@ func scale_dialogue_box() -> void:
 		await get_tree().process_frame
 		rich_text_label.size.y = rich_text_label.get_content_height()
 	
-	var tween := create_tween()
+	var tween := create_tween().set_parallel(true)
 	tween.tween_property(self, "bubble_rect", Rect2(Vector2.ZERO, rich_text_label.size), 0.2)
-	calculate_bubble_points()
+	tween.tween_method(calculate_bubble_points, bubble_rect, Rect2(Vector2.ZERO, rich_text_label.size), 0.2)
+#	calculate_bubble_points()
 
 func final_text_format(txt: String) -> String:
 #	# this bit of code will make it so that you the text can easily be made more accessible.
@@ -87,7 +86,7 @@ func calculate_bubble_data() -> void:
 
 
 func calculate_bubble_location() -> Vector2:
-	return Vector2(600, 600)
+	return Vector2.ZERO
 	pass
 	var pos : Vector2 = icutils.get_actor_top_center(speaker)
 	if pos_flag == POS_FLAGS.FORCE_BOTTOM or pos.y < icutils.get_cam_center(Vector2(0, -0.166)).y:
@@ -99,15 +98,17 @@ func calculate_bubble_location() -> Vector2:
 	return pos
 
 
-func calculate_bubble_points() -> void:
+func calculate_bubble_points(rect: Rect2) -> void:
 	bubble_points_base = []
 	var temp_points : PackedVector2Array = []
 	for i in 4:
-		temp_points = offset_bubble_points(i)
+		prints("index", i)
+		temp_points = offset_bubble_points(i, rect)
 		bubble_points_base.append_array(temp_points)
+	prints("bbpb", bubble_points_base)
 
 func draw_bubble() -> void:
-	print(bubble_points)
+	prints("bubble points", bubble_points)
 	draw_colored_polygon(bubble_points, bubble_colour)
 
 
@@ -116,28 +117,28 @@ func draw_speech_line() -> void:
 
 
 func _draw() -> void:
+	if bubble_points.is_empty():
+		return
 	draw_bubble()
 	draw_speech_line()
 
-func offset_bubble_points(corner: int) -> PackedVector2Array:
+func offset_bubble_points(corner: int, rect: Rect2) -> PackedVector2Array:
 	var temp_points : PackedVector2Array = rotate_and_scale_bubble_corner(corner)
+	
 	match corner:
 		0:
 			for point in temp_points.size():
-				temp_points[point].x -= bubble_padding
-				temp_points[point].y -= bubble_padding
+				temp_points[point] -= Vector2(bubble_padding, bubble_padding)
 		1:
 			for point in temp_points.size():
-				temp_points[point].x += bubble_padding + bubble_rect.size.x
-				temp_points[point].y -= bubble_padding
+				temp_points[point] += Vector2(bubble_padding + rect.size.x, -bubble_padding)
 		2:
 			for point in temp_points.size():
-				temp_points[point].x += bubble_padding + bubble_rect.size.x
-				temp_points[point].y += bubble_padding + bubble_rect.size.y
+				temp_points[point] += Vector2(bubble_padding + rect.size.x, bubble_padding + rect.size.y)
 		3:
 			for point in temp_points.size():
-				temp_points[point].x -= bubble_padding
-				temp_points[point].y += bubble_padding + bubble_rect.size.y
+				temp_points[point] -= Vector2(bubble_padding, -bubble_padding + rect.size.y)
+	prints("temp points", temp_points)
 	return temp_points
 
 
@@ -158,6 +159,7 @@ func rotate_and_scale_bubble_corner(turns: int) -> PackedVector2Array:
 				corner[point].y = -corner[point].y
 	for point in corner.size():
 		corner[point] = corner[point] * bubble_corner_size
+	prints("corner", turns, corner)
 	return corner
 
 
@@ -169,8 +171,8 @@ func update_bubble_points(delta: float) -> void:
 			return
 	for point in bubble_points_base.size():
 		bubble_points[point] = Vector2(
-			bubble_point_move_scale * sin(bubble_points_base[point].x + point + delta),
-			bubble_point_move_scale * cos(bubble_points_base[point].y + point + delta)
+			bubble_points_base[point].x + bubble_point_move_scale * sin(point + delta),
+			bubble_points_base[point].y + bubble_point_move_scale * cos(point + delta)
 			)
 
 
