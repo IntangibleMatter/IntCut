@@ -33,10 +33,10 @@ var corner_points_template : Array[PackedVector2Array] = [
 		Vector2(0, 1)
 	],
 	[ # bottom left
-		Vector2(-1, 0),
+		Vector2(0, -1),
 		Vector2(-0.4, 0.9),
 		Vector2(-0.9, 0.4),
-		Vector2(0, -1)
+		Vector2(-1, 0)
 	],
 ]
 var corner_scale : float = 1
@@ -59,6 +59,7 @@ func _ready() -> void:
 	waittt()
 
 func _process(delta: float) -> void:
+	prints("template", corner_points_template)	
 	update_bubble_points(delta)
 	update_speech_line()
 	queue_redraw()
@@ -138,10 +139,13 @@ func _draw() -> void:
 	draw_speech_line()
 
 func offset_bubble_points(rect: Rect2) -> PackedVector2Array:
-	var temp_points : Array[PackedVector2Array] = corner_points_template
+	var temp_points : Array[PackedVector2Array]
+	temp_points.append_array(corner_points_template)
 	for i in temp_points.size():
 		for point in temp_points[i].size():
+			prints("i", temp_points[i][point])
 			temp_points[i][point] *= bubble_corner_size
+			prints("j", temp_points[i][point])
 			match i:
 				0:
 					temp_points[i][point] += Vector2(-bubble_padding, -bubble_padding)
