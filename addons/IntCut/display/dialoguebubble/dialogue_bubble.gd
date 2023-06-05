@@ -13,11 +13,31 @@ var bubble_points_base : PackedVector2Array # points which displayed bubble is b
 var bubble_points : PackedVector2Array # Displayed points. Updates.
 var bubble_colour := Color.BLACK
 
-var corner_points_template : PackedVector2Array = [
-	Vector2(-1.5, 2.5),
-	Vector2(-0.5, 0.5),
-	Vector2(0.5, -0.5),
-	Vector2(2.5, -1.5)
+var corner_points_template : Array[PackedVector2Array] = [
+	[ # top left
+		Vector2(-1, 0),
+		Vector2(-0.9, -0.4),
+		Vector2(-0.4, -0.9),
+		Vector2(0, -1)
+	],
+	[ # top right
+		Vector2(0, -1),
+		Vector2(0.4, -0.9),
+		Vector2(0.9, -0.4),
+		Vector2(1, 0)
+	],
+	[ # bottom right
+		Vector2(1, 0),
+		Vector2(0.9, 0.4),
+		Vector2(0.4, 0.9),
+		Vector2(0, 1)
+	],
+	[ # bottom left
+		Vector2(-1, 0),
+		Vector2(-0.4, 0.9),
+		Vector2(-0.9, 0.4),
+		Vector2(0, -1)
+	],
 ]
 var corner_scale : float = 1
 
@@ -27,7 +47,7 @@ var corner_scale : float = 1
 
 @export var bubble_corner_size := 1
 @export var bubble_point_move_scale := 2
-@export var bubble_padding := 16
+@export var bubble_padding := 1
 
 @onready var rich_text_label = $RichTextLabel
 @onready var icutils := IntCutUtils.new()
@@ -99,17 +119,12 @@ func calculate_bubble_location() -> Vector2:
 
 
 func calculate_bubble_points(rect: Rect2) -> void:
-	bubble_points_base = []
-	var temp_points : PackedVector2Array = []
-	for i in 4:
-		prints("index", i)
-		temp_points = offset_bubble_points(i, rect)
-		bubble_points_base.append_array(temp_points)
+	bubble_points_base = offset_bubble_points(rect)
 	prints("bbpb", bubble_points_base)
 
 func draw_bubble() -> void:
-	prints("bubble points", bubble_points)
-	draw_colored_polygon(bubble_points, bubble_colour)
+#	prints("bubble points", bubble_points)
+	draw_colored_polygon(bubble_points_base, bubble_colour)
 
 
 func draw_speech_line() -> void:
@@ -122,45 +137,31 @@ func _draw() -> void:
 	draw_bubble()
 	draw_speech_line()
 
-func offset_bubble_points(corner: int, rect: Rect2) -> PackedVector2Array:
-	var temp_points : PackedVector2Array = rotate_and_scale_bubble_corner(corner)
-	
-	match corner:
-		0:
-			for point in temp_points.size():
-				temp_points[point] -= Vector2(bubble_padding, bubble_padding)
-		1:
-			for point in temp_points.size():
-				temp_points[point] += Vector2(bubble_padding + rect.size.x, -bubble_padding)
-		2:
-			for point in temp_points.size():
-				temp_points[point] += Vector2(bubble_padding + rect.size.x, bubble_padding + rect.size.y)
-		3:
-			for point in temp_points.size():
-				temp_points[point] -= Vector2(bubble_padding, -bubble_padding + rect.size.y)
+func offset_bubble_points(rect: Rect2) -> PackedVector2Array:
+	var temp_points : Array[PackedVector2Array] = corner_points_template
+	for i in temp_points.size():
+		for point in temp_points[i].size():
+			temp_points[i][point] *= bubble_corner_size
+			match i:
+				0:
+					temp_points[i][point] += Vector2(-bubble_padding, -bubble_padding)
+					prints("bipple", i, point, temp_points[i][point])
+				1:
+					temp_points[i][point] += Vector2(bubble_padding + rect.size.x, -bubble_padding)
+					prints("baaple", i, point, temp_points[i][point])
+				2:
+					temp_points[i][point] += Vector2(bubble_padding + rect.size.x, bubble_padding + rect.size.y)
+					prints("boople", i, point, temp_points[i][point])
+				3:
+					temp_points[i][point] += Vector2(-bubble_padding, bubble_padding + rect.size.y)
+					prints("beeple", i, point, temp_points[i][point])
+
 	prints("temp points", temp_points)
-	return temp_points
-
-
-func rotate_and_scale_bubble_corner(turns: int) -> PackedVector2Array:
-	var corner : PackedVector2Array = corner_points_template
-	match turns % 4:
-		0:
-			pass
-		1: # flip h
-			for point in corner.size():
-				corner[point].x = -corner[point].x
-		2: # flip h and v
-			for point in corner.size():
-				corner[point].x = -corner[point].x
-				corner[point].y = -corner[point].y
-		3: # flip v
-			for point in corner.size():
-				corner[point].y = -corner[point].y
-	for point in corner.size():
-		corner[point] = corner[point] * bubble_corner_size
-	prints("corner", turns, corner)
-	return corner
+	var tpoints: PackedVector2Array = []
+	for i in 4:
+		tpoints.append_array(temp_points[i])
+		
+	return tpoints
 
 
 func update_bubble_points(delta: float) -> void:
