@@ -139,13 +139,16 @@ func _draw() -> void:
 	draw_speech_line()
 
 func offset_bubble_points(rect: Rect2) -> PackedVector2Array:
-	var temp_points : Array[PackedVector2Array]
-	temp_points.append_array(corner_points_template)
+	var temp_points : Array[PackedVector2Array] = []
+	
+	# separate loop because it infinitely recurses in same loop. Fucked if I know.
+	for i in corner_points_template.size():
+		temp_points.append(PackedVector2Array())
+		for j in corner_points_template[i].size():
+			temp_points[i].append(corner_points_template[i][j] * bubble_corner_size)
+	
 	for i in temp_points.size():
 		for point in temp_points[i].size():
-			prints("i", temp_points[i][point])
-			temp_points[i][point] *= bubble_corner_size
-			prints("j", temp_points[i][point])
 			match i:
 				0:
 					temp_points[i][point] += Vector2(-bubble_padding, -bubble_padding)
