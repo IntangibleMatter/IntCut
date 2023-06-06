@@ -33,7 +33,7 @@ var corner_points_template : Array[PackedVector2Array] = [
 		Vector2(0, 1)
 	],
 	[ # bottom left
-		Vector2(0, -1),
+		Vector2(0, 1),
 		Vector2(-0.4, 0.9),
 		Vector2(-0.9, 0.4),
 		Vector2(-1, 0)
@@ -55,7 +55,7 @@ var corner_scale : float = 1
 func _ready() -> void:
 	bubble_rect = Rect2(calculate_bubble_location(), Vector2.ZERO)
 	calculate_bubble_points(bubble_rect)
-	rich_text_label.text = """[center]Hi"""
+	rich_text_label.text = """[center][shake]What the fuck is wrong with you[/shake]"""
 	waittt()
 
 func _process(delta: float) -> void:
@@ -83,8 +83,9 @@ func scale_dialogue_box() -> void:
 		rich_text_label.size.y = rich_text_label.get_content_height()
 	
 	var tween := create_tween().set_parallel(true)
-	tween.tween_property(self, "bubble_rect", Rect2(Vector2.ZERO, rich_text_label.size), 0.2)
-	tween.tween_method(calculate_bubble_points, bubble_rect, Rect2(Vector2.ZERO, rich_text_label.size), 0.2)
+	var new_rect : Rect2 = Rect2(Vector2(256, 256), rich_text_label.size)
+	tween.tween_property(self, "bubble_rect", new_rect, 0.2)
+	tween.tween_method(calculate_bubble_points, bubble_rect, new_rect, 0.2)
 #	calculate_bubble_points()
 
 func final_text_format(txt: String) -> String:
