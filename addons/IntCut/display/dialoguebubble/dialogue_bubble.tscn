@@ -7,7 +7,10 @@ layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
 script = ExtResource("1_86hkd")
+bubble_oscilate_speed = 312.0
 bubble_corner_size = 32
+bubble_point_move_scale = 4
+bubble_padding = 4
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
