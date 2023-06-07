@@ -62,13 +62,14 @@ var corner_scale : float = 1
 @onready var icutils := IntCutUtils.new()
 
 func _ready() -> void:
-	bubble_rect = Rect2(calculate_bubble_location(), Vector2.ZERO)
+	bubble_rect = Rect2(calculate_bubble_location(), Vector2(100, 100))
 	calculate_bubble_points(bubble_rect)
-	rich_text_label.text = """[center][shake rate=20 level=20]What the fuck is wrong with you[/shake]"""
+	rich_text_label.text = """[center][wave amp=30]broooooooooooooo...[/wave] That's [shake level=20]SO COOL[/shake]"""
 	waittt()
 
 func _process(delta: float) -> void:
 #	prints("template", corner_points_template)
+	rich_text_label.position = bubble_rect.position
 	update_bubble_points()
 	update_speech_line()
 	queue_redraw()
@@ -92,7 +93,7 @@ func scale_dialogue_box() -> void:
 		rich_text_label.size.y = rich_text_label.get_content_height()
 	
 	var tween := create_tween().set_parallel(true)
-	var new_rect : Rect2 = Rect2(Vector2(256, 256), rich_text_label.size)
+	var new_rect : Rect2 = Rect2(Vector2(512, 512), rich_text_label.size)
 	tween.tween_property(self, "bubble_rect", new_rect, 0.4)
 	tween.tween_method(calculate_bubble_points, bubble_rect, new_rect, 0.4)
 #	calculate_bubble_points()
@@ -135,7 +136,7 @@ func calculate_bubble_points(rect: Rect2) -> void:
 
 func draw_bubble() -> void:
 	draw_colored_polygon(bubble_points, bubble_colour)
-	prints("bubble points", bubble_points)
+#	prints("bubble points", bubble_points)
 
 
 func draw_speech_line() -> void:
@@ -192,7 +193,7 @@ func update_bubble_points() -> void:
 			bubble_point_move_scale * cos(point + Time.get_ticks_msec()/bubble_oscilate_speed)
 		)
 		var pointsign : Vector2 = bubble_points_base[point].sign()
-		prints("pointttt", bubble_points_base[point], pointsign)
+#		prints("pointttt", bubble_points_base[point], pointsign)
 		if pointsign.x < 0:
 			newpoint.x = bubble_points_base[point].x - pointoffset.x
 		else:
@@ -201,8 +202,10 @@ func update_bubble_points() -> void:
 			newpoint.y = bubble_points_base[point].y - pointoffset.y
 		else:
 			newpoint.y = bubble_points_base[point].y + pointoffset.y
+		prints("np", newpoint, bubble_rect.position)
+		newpoint += bubble_rect.position
 		bubble_points.append(newpoint)
-#		prints("np", newpoint)
+		prints("npbbr", newpoint)
 #	prints("bubble points", bubble_points)
 
 

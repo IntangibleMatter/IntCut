@@ -7,9 +7,8 @@ layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
 script = ExtResource("1_86hkd")
-bubble_oscilate_speed = 312.0
 bubble_corner_size = 32
-bubble_point_move_scale = 4
+bubble_point_move_scale = 5
 bubble_padding = 4
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
@@ -33,4 +32,5 @@ grow_vertical = 2
 color = Color(1, 0.239216, 1, 0.427451)
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(-1, -1)
+position = Vector2(158, 143)
+enabled = false
