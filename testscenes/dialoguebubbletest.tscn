@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3 uid="uid://boki72uvxtcvs"]
+
+[ext_resource type="PackedScene" uid="uid://boukjuupuqgnb" path="res://addons/IntCut/display/dialoguebubble/dialogue_bubble.tscn" id="1_4ggul"]
+
+[node name="dialoguebubbletest" type="Node2D"]
+
+[node name="DialogueBubble" parent="." instance=ExtResource("1_4ggul")]
+offset_left = 94.0
+offset_top = 67.0
+offset_right = 94.0
+offset_bottom = 67.0
+text = PackedStringArray("[shake level=25]What the FUCK is wrong with you???\\nWhat the [color=red]fuck[/color] did you do???")
+bubble_oscilate_speed = 370.0

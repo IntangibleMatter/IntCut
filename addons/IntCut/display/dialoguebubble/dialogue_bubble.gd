@@ -66,7 +66,7 @@ var corner_points_template : Array[PackedVector2Array] = [
 @export var pos_flag : POS_FLAGS
 
 ## Speed at which bubble oscilates. Higher number is slower.
-@export var bubble_oscilate_speed : float = 500
+@export_range(1, 1000) var bubble_oscilate_speed : float = 500
 ## Factor the corners will be scaled by.
 @export var bubble_corner_size := 32
 ## Factor the corners of the bubble will oscilate by. No set maximum, as
@@ -80,9 +80,9 @@ var corner_points_template : Array[PackedVector2Array] = [
 @onready var icutils := IntCutUtils.new()
 
 func _ready() -> void:
-	bubble_rect = Rect2(calculate_bubble_location(), Vector2(100, 100))
+	bubble_rect = Rect2(calculate_bubble_location(), Vector2.ZERO)
 	calculate_bubble_points(bubble_rect)
-	rich_text_label.text = """[center]Onesimo"""
+	rich_text_label.text =  "[center]" + text[0].replace("\\n", "\n")
 	waittt()
 
 func _process(delta: float) -> void:
