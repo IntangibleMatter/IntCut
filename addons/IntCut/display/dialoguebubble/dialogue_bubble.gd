@@ -76,6 +76,8 @@ var corner_points_template : Array[PackedVector2Array] = [
 ## Additional padding between edges of RichTextLabel and the edges of the bubble.
 @export var bubble_padding := 1
 
+@export_range(0.2, 1) var maximum_box_size : float = 0.9
+
 @onready var rich_text_label = $RichTextLabel
 @onready var icutils := IntCutUtils.new()
 
@@ -110,7 +112,7 @@ func scale_dialogue_box() -> void:
 	prints("init", rich_text_label.size)
 	prints("height", rich_text_label.get_content_height())
 	if rich_text_label.size.x > get_viewport_rect().size.x:
-		rich_text_label.size.x = get_viewport_rect().size.x - (get_viewport_rect().size.x / 10)
+		rich_text_label.size.x = get_viewport_rect().size.x * maximum_box_size
 		rich_text_label.size.x = rich_text_label.get_content_width()
 		await get_tree().process_frame
 		rich_text_label.size.y = rich_text_label.get_content_height()
@@ -152,7 +154,7 @@ func calculate_bubble_data() -> void:
 
 ## Calculate the location of the bubble on the screen.
 func calculate_bubble_location() -> Vector2:
-	return Vector2(128, 128)
+	return Vector2(20,20)
 	pass
 	var pos : Vector2 = icutils.get_actor_top_center(speaker)
 	if pos_flag == POS_FLAGS.FORCE_BOTTOM or pos.y < icutils.get_cam_center(Vector2(0, -0.166)).y:
@@ -228,20 +230,13 @@ func update_bubble_points() -> void:
 		)
 		var pointsign : Vector2 = bubble_points_base[point].sign()
 #		prints("pointttt", bubble_points_base[point], pointsign)
-		if pointsign.x < 0:
-			if pointsign.y <= 0:
-				newpoint.x = bubble_points_base[point].x + pointoffset.x
-			else: 
-				newpoint.x = bubble_points_base[point].x - pointoffset.x
-		else:
-			if pointsign.y <= 0:
-				newpoint.x = bubble_points_base[point].x + pointoffset.x
-			else:
-				newpoint.x = bubble_points_base[point].x - pointoffset.x
-		if pointsign.y <  0:
+		if pointsign.y <=  0:
 			newpoint.y = bubble_points_base[point].y - pointoffset.y
+
+			newpoint.x = bubble_points_base[point].x + pointoffset.x
 		else:
 			newpoint.y = bubble_points_base[point].y + pointoffset.y
+			newpoint.x = bubble_points_base[point].x - pointoffset.x
 #		prints("np", newpoint, bubble_rect.position)
 		newpoint += bubble_rect.position
 		bubble_points.append(newpoint)

@@ -9,6 +9,7 @@ offset_left = 94.0
 offset_top = 67.0
 offset_right = 94.0
 offset_bottom = 67.0
-text = PackedStringArray("mr blacckmon teaches [shake level=100]creative writing")
+text = PackedStringArray("[wave amp=60] a a a a a a a a  a a a a a a a  a a a a a a a a a a a a a  a a a a  a a a a a a a a a a a a a a a a  a a a  a a a a a a a a a a a a a a a a a a a a a a aa a a")
 bubble_oscilate_speed = 854.541
+bubble_corner_size = 48
 bubble_point_move_scale = 5
