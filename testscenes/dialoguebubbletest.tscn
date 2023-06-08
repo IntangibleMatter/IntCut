@@ -9,5 +9,6 @@ offset_left = 94.0
 offset_top = 67.0
 offset_right = 94.0
 offset_bottom = 67.0
-text = PackedStringArray("[shake level=25]What the FUCK is wrong with you???\\nWhat the [color=red]fuck[/color] did you do???")
-bubble_oscilate_speed = 370.0
+text = PackedStringArray("mr blacckmon teaches [shake level=100]creative writing")
+bubble_oscilate_speed = 854.541
+bubble_point_move_scale = 5

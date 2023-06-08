@@ -229,9 +229,15 @@ func update_bubble_points() -> void:
 		var pointsign : Vector2 = bubble_points_base[point].sign()
 #		prints("pointttt", bubble_points_base[point], pointsign)
 		if pointsign.x < 0:
-			newpoint.x = bubble_points_base[point].x - pointoffset.x
+			if pointsign.y <= 0:
+				newpoint.x = bubble_points_base[point].x + pointoffset.x
+			else: 
+				newpoint.x = bubble_points_base[point].x - pointoffset.x
 		else:
-			newpoint.x = bubble_points_base[point].x + pointoffset.x
+			if pointsign.y <= 0:
+				newpoint.x = bubble_points_base[point].x + pointoffset.x
+			else:
+				newpoint.x = bubble_points_base[point].x - pointoffset.x
 		if pointsign.y <  0:
 			newpoint.y = bubble_points_base[point].y - pointoffset.y
 		else:
