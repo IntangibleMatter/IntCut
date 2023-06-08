@@ -7,9 +7,7 @@ layout_mode = 3
 anchors_preset = 0
 mouse_filter = 2
 script = ExtResource("1_86hkd")
-bubble_corner_size = 32
-bubble_point_move_scale = 5
-bubble_padding = 4
+bubble_oscilate_speed = 100.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0
@@ -18,7 +16,9 @@ mouse_filter = 2
 theme_override_font_sizes/normal_font_size = 40
 bbcode_enabled = true
 fit_content = true
+visible_characters = 0
 visible_characters_behavior = 1
+visible_ratio = 0.0
 
 [node name="ColorRect" type="ColorRect" parent="RichTextLabel"]
 visible = false

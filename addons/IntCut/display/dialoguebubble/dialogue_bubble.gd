@@ -4,15 +4,25 @@ extends Control
 enum POS_FLAGS {DEFAULT, FORCE_TOP, FORCE_BOTTOM}
 
 var scaled := false
+## flag to handle weird glitch.
+var scaling := false
 
-var text_position := 0 #stores the position in the dialogue bubble
-var text_string_positon := 0 # Stores the position in the text string to deal with delays and the like
+## stores the position in the dialogue bubble.
+var text_position := 0 
+## Stores the position in the text string to deal with delays and the like.
+var text_string_positon := 0 
 
+## Internal variable used to determine size/position of dialogue bubble.
 var bubble_rect: Rect2
-var bubble_points_base : PackedVector2Array # points which displayed bubble is based on. Doesn't change.
+## Base of dialogue bubble, used to track points before modification. Constant for each bubble.
+var bubble_points_base : PackedVector2Array
+## Displayed bubble points.
 var bubble_points : PackedVector2Array # Displayed points. Updates.
+## Colour of the dialogue bubble.
 var bubble_colour := Color.BLACK
 
+
+## The template used to determine how the corners look.
 var corner_points_template : Array[PackedVector2Array] = [
 	[ # top left
 		Vector2(-1, -0.1),
@@ -47,15 +57,23 @@ var corner_points_template : Array[PackedVector2Array] = [
 		Vector2(-1, 0.1),
 	],
 ]
-var corner_scale : float = 1
 
+## Array of the text that will be displayed.
 @export var text : PackedStringArray
+## The actor who is speaking.
 @export var speaker: Node2D
+## Flag to determine positioning.
 @export var pos_flag : POS_FLAGS
 
+## Speed at which bubble oscilates. Higher number is slower.
 @export var bubble_oscilate_speed : float = 500
-@export var bubble_corner_size := 1
+## Factor the corners will be scaled by.
+@export var bubble_corner_size := 32
+## Factor the corners of the bubble will oscilate by. No set maximum, as
+## the number at which the polygon will become invalid (due to self-overlap)
+## varies depending on the padding and corner size.
 @export var bubble_point_move_scale := 2
+## Additional padding between edges of RichTextLabel and the edges of the bubble.
 @export var bubble_padding := 1
 
 @onready var rich_text_label = $RichTextLabel
@@ -64,40 +82,55 @@ var corner_scale : float = 1
 func _ready() -> void:
 	bubble_rect = Rect2(calculate_bubble_location(), Vector2(100, 100))
 	calculate_bubble_points(bubble_rect)
-	rich_text_label.text = """[center][wave amp=30]broooooooooooooo...[/wave] That's [shake level=20]SO COOL[/shake]"""
+	rich_text_label.text = """[center]Onesimo"""
 	waittt()
 
 func _process(delta: float) -> void:
 #	prints("template", corner_points_template)
+	if not scaling:
+		rich_text_label.size = bubble_rect.size
 	rich_text_label.position = bubble_rect.position
 	update_bubble_points()
 	update_speech_line()
 	queue_redraw()
 
+
+## Debug function. Please ignore.
 func waittt() -> void:
 	await get_tree().create_timer(4)
 	print("GOOO")
 	scale_dialogue_box()
 
-
+## Scales the dialogue box to the new text size.
 func scale_dialogue_box() -> void:
+	scaling = true
 	rich_text_label.size.x = rich_text_label.get_content_width()
 	await get_tree().process_frame
 	rich_text_label.size.y = rich_text_label.get_content_height()
-	print(rich_text_label.size)
-	print(rich_text_label.get_content_height())
+	prints("init", rich_text_label.size)
+	prints("height", rich_text_label.get_content_height())
 	if rich_text_label.size.x > get_viewport_rect().size.x:
 		rich_text_label.size.x = get_viewport_rect().size.x - (get_viewport_rect().size.x / 10)
 		rich_text_label.size.x = rich_text_label.get_content_width()
 		await get_tree().process_frame
 		rich_text_label.size.y = rich_text_label.get_content_height()
 	
+	
+	await get_tree().process_frame
 	var tween := create_tween().set_parallel(true)
-	var new_rect : Rect2 = Rect2(Vector2(512, 512), rich_text_label.size)
+	var new_rect : Rect2 = Rect2(calculate_bubble_location(), rich_text_label.size)
 	tween.tween_property(self, "bubble_rect", new_rect, 0.4)
 	tween.tween_method(calculate_bubble_points, bubble_rect, new_rect, 0.4)
+	tween.set_parallel(false)
+	tween.tween_property(rich_text_label, "visible_ratio", 1, 1)
+	await tween.finished
+	# weird glitch where text sometimes changes scale. fixed with this lightly jank permacheck
+	scaling = false
+	print("post", rich_text_label.size)
+	
 #	calculate_bubble_points()
 
+## Additional text formatting. Mostly for stuff like accessibility fonts and the like.
 func final_text_format(txt: String) -> String:
 #	# this bit of code will make it so that you the text can easily be made more accessible.
 #	# Modify for however you do settings, and more wherever the fonts are.
@@ -113,12 +146,13 @@ func final_text_format(txt: String) -> String:
 	return txt
 
 
+## Calculates the position of the box and the like
 func calculate_bubble_data() -> void:
 	calculate_bubble_location()
 
-
+## Calculate the location of the bubble on the screen.
 func calculate_bubble_location() -> Vector2:
-	return Vector2.ZERO
+	return Vector2(128, 128)
 	pass
 	var pos : Vector2 = icutils.get_actor_top_center(speaker)
 	if pos_flag == POS_FLAGS.FORCE_BOTTOM or pos.y < icutils.get_cam_center(Vector2(0, -0.166)).y:
@@ -147,7 +181,7 @@ func _draw() -> void:
 	if bubble_points.is_empty():
 		return
 #	prints("bubble points", bubble_points)
-	print("drawing!")
+#	print("drawing!")
 	draw_bubble()
 	draw_speech_line()
 
@@ -183,7 +217,7 @@ func offset_bubble_points(rect: Rect2) -> PackedVector2Array:
 		
 	return tpoints
 
-
+## Offsets all the points in the bubble to make it move.
 func update_bubble_points() -> void:
 	bubble_points.clear()
 	for point in bubble_points_base.size():
@@ -202,13 +236,13 @@ func update_bubble_points() -> void:
 			newpoint.y = bubble_points_base[point].y - pointoffset.y
 		else:
 			newpoint.y = bubble_points_base[point].y + pointoffset.y
-		prints("np", newpoint, bubble_rect.position)
+#		prints("np", newpoint, bubble_rect.position)
 		newpoint += bubble_rect.position
 		bubble_points.append(newpoint)
-		prints("npbbr", newpoint)
+#		prints("npbbr", newpoint)
 #	prints("bubble points", bubble_points)
 
 
-
+## Changes to the next line of dialogue
 func update_speech_line() -> void:
 	pass
