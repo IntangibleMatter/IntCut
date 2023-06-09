@@ -1,15 +1,29 @@
-[gd_scene load_steps=2 format=3 uid="uid://boki72uvxtcvs"]
+[gd_scene load_steps=4 format=3 uid="uid://boki72uvxtcvs"]
 
 [ext_resource type="PackedScene" uid="uid://boukjuupuqgnb" path="res://addons/IntCut/display/dialoguebubble/dialogue_bubble.tscn" id="1_4ggul"]
+[ext_resource type="Script" path="res://testscenes/dialoguebubbletest.gd" id="1_m1g5f"]
+[ext_resource type="Texture2D" uid="uid://tdxc17vshma2" path="res://icon.svg" id="2_xf533"]
 
 [node name="dialoguebubbletest" type="Node2D"]
+script = ExtResource("1_m1g5f")
+actor = NodePath("TestActor")
 
-[node name="DialogueBubble" parent="." instance=ExtResource("1_4ggul")]
+[node name="DialogueBubble" parent="." node_paths=PackedStringArray("speaker") instance=ExtResource("1_4ggul")]
 offset_left = 94.0
 offset_top = 67.0
 offset_right = 94.0
 offset_bottom = 67.0
-text = PackedStringArray("[wave amp=60] a a a a a a a a  a a a a a a a  a a a a a a a a a a a a a  a a a a  a a a a a a a a a a a a a a a a  a a a  a a a a a a a a a a a a a a a a a a a a a a aa a a")
-bubble_oscilate_speed = 854.541
-bubble_corner_size = 48
-bubble_point_move_scale = 5
+text = PackedStringArray("How\'s it going")
+speaker = NodePath("../TestActor")
+bubble_oscilate_speed = 500.0
+bubble_point_move_scale = 4
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(520, 264)
+
+[node name="TestActor" type="Node2D" parent="."]
+position = Vector2(112, 288)
+
+[node name="Sprite2D" type="Sprite2D" parent="TestActor"]
+texture = ExtResource("2_xf533")
+metadata/_edit_lock_ = true

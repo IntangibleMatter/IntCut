@@ -30,7 +30,3 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(1, 0.239216, 1, 0.427451)
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(158, 143)
-enabled = false

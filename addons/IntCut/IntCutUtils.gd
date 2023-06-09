@@ -4,16 +4,18 @@ class_name IntCutUtils
 ## Translate a world position to a screen position
 func world_to_screen(world_coordinates: Vector2) -> Vector2:
 	var cam := get_viewport().get_camera_2d()
-	return world_coordinates - cam.global_position
+	return world_coordinates - cam.global_position - cam.offset
 
 ## get the top center point of an actor
 func get_actor_top_center(actor: Node2D) -> Vector2:
 	var spr := get_actor_rect(actor)
-	return spr.position + Vector2(spr.size.x/2, 0)
+	return spr.position + Vector2(0, -spr.size.y/2)
 
 ## get an actor's rect
 func get_actor_rect(actor: Node2D) -> Rect2:
-	var spr := actor.get_node("$Sprite2D") as Sprite2D
+	var spr := actor.get_node("Sprite2D") as Sprite2D
+	if !is_instance_valid(spr):
+		return Rect2()
 	var r := spr.get_rect()
 	return Rect2(spr.to_global(r.position), r.size)
 

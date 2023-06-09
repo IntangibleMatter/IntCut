@@ -20,6 +20,8 @@ var bubble_points_base : PackedVector2Array
 var bubble_points : PackedVector2Array # Displayed points. Updates.
 ## Colour of the dialogue bubble.
 var bubble_colour := Color.BLACK
+## Points used to draw the line between the speech bubble and the actor
+var speech_line_points : PackedVector2Array
 
 
 ## The template used to determine how the corners look.
@@ -66,7 +68,7 @@ var corner_points_template : Array[PackedVector2Array] = [
 @export var pos_flag : POS_FLAGS
 
 ## Speed at which bubble oscilates. Higher number is slower.
-@export_range(1, 1000) var bubble_oscilate_speed : float = 500
+@export_range(1, 1000) var bubble_oscilate_speed : float = 700
 ## Factor the corners will be scaled by.
 @export var bubble_corner_size := 32
 ## Factor the corners of the bubble will oscilate by. No set maximum, as
@@ -75,8 +77,11 @@ var corner_points_template : Array[PackedVector2Array] = [
 @export var bubble_point_move_scale := 2
 ## Additional padding between edges of RichTextLabel and the edges of the bubble.
 @export var bubble_padding := 1
-
+## Sets the maximum horizontal scale of the dialogue bubble.
 @export_range(0.2, 1) var maximum_box_size : float = 0.9
+## Sets the maximum width of the speech bubble connector
+@export var maximum_speech_connector_width : float = 30
+
 
 @onready var rich_text_label = $RichTextLabel
 @onready var icutils := IntCutUtils.new()
@@ -85,7 +90,7 @@ func _ready() -> void:
 	bubble_rect = Rect2(calculate_bubble_location(), Vector2.ZERO)
 	calculate_bubble_points(bubble_rect)
 	rich_text_label.text =  "[center]" + text[0].replace("\\n", "\n")
-	waittt()
+	scale_dialogue_box()
 
 func _process(delta: float) -> void:
 #	prints("template", corner_points_template)
@@ -96,12 +101,6 @@ func _process(delta: float) -> void:
 	update_speech_line()
 	queue_redraw()
 
-
-## Debug function. Please ignore.
-func waittt() -> void:
-	await get_tree().create_timer(4)
-	print("GOOO")
-	scale_dialogue_box()
 
 ## Scales the dialogue box to the new text size.
 func scale_dialogue_box() -> void:
@@ -172,11 +171,13 @@ func calculate_bubble_points(rect: Rect2) -> void:
 
 func draw_bubble() -> void:
 	draw_colored_polygon(bubble_points, bubble_colour)
+#	draw_polyline(bubble_points, Color.WHITE, 8)
 #	prints("bubble points", bubble_points)
 
 
 func draw_speech_line() -> void:
-	pass
+	draw_colored_polygon(speech_line_points, bubble_colour)
+#	draw_polyline(speech_line_points, Color.WHITE, 4)
 
 
 func _draw() -> void:
@@ -184,8 +185,9 @@ func _draw() -> void:
 		return
 #	prints("bubble points", bubble_points)
 #	print("drawing!")
-	draw_bubble()
 	draw_speech_line()
+	draw_bubble()
+
 
 func offset_bubble_points(rect: Rect2) -> PackedVector2Array:
 	var temp_points : Array[PackedVector2Array] = []
@@ -232,7 +234,6 @@ func update_bubble_points() -> void:
 #		prints("pointttt", bubble_points_base[point], pointsign)
 		if pointsign.y <=  0:
 			newpoint.y = bubble_points_base[point].y - pointoffset.y
-
 			newpoint.x = bubble_points_base[point].x + pointoffset.x
 		else:
 			newpoint.y = bubble_points_base[point].y + pointoffset.y
@@ -244,6 +245,20 @@ func update_bubble_points() -> void:
 #	prints("bubble points", bubble_points)
 
 
-## Changes to the next line of dialogue
+## Updates the line between the actor and the dialogue bubble
 func update_speech_line() -> void:
-	pass
+	var temp_points : PackedVector2Array
+	var rect_center := bubble_rect.get_center()
+	
+	temp_points.append(icutils.get_actor_top_center(speaker))
+#	temp_points.append(get_viewport().get_mouse_position() - get_viewport().get_final_transform().get_origin())
+	
+	if maximum_speech_connector_width * 2 > bubble_rect.size.x:
+		temp_points.append(rect_center - Vector2(bubble_rect.size.x/2, 0))
+		temp_points.append(rect_center + Vector2(bubble_rect.size.x/2, 0))
+	else:
+		temp_points.append(rect_center - Vector2(maximum_speech_connector_width, 0))
+		temp_points.append(rect_center + Vector2(maximum_speech_connector_width, 0))
+#	prints(get_viewport().get_mouse_position(), temp_points)
+	speech_line_points = temp_points
+	
