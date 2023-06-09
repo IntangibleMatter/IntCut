@@ -186,6 +186,16 @@ func _draw() -> void:
 		return
 #	prints("bubble points", bubble_points)
 #	print("drawing!")
+
+	
+	var spr := icutils.get_actor_sprite(speaker)
+	var spr_rect := spr.get_rect()
+	draw_colored_polygon([
+		spr.to_global(spr_rect.position),
+		spr.to_global(spr_rect.position) + Vector2(spr_rect.size.x, 0),
+		spr.to_global(spr_rect.position) + spr_rect.size,
+		spr.to_global(spr_rect.position) + Vector2(0, spr_rect.size.y)
+	], Color.DEEP_PINK)
 	draw_tail()
 	draw_bubble()
 
@@ -251,7 +261,7 @@ func update_tail() -> void:
 	var temp_points : PackedVector2Array
 	var rect_center := bubble_rect.get_center()
 	
-	temp_points.append(await icutils.world_to_screen(icutils.get_actor_top_center(speaker)))
+	temp_points.append(icutils.get_actor_top_center_screen_position(speaker))
 #	temp_points.append(get_viewport().get_mouse_position() - get_viewport().get_final_transform().get_origin())
 	
 	# Make it so they rotate to face the last point. Bit of trig to do, I guess.
@@ -265,3 +275,4 @@ func update_tail() -> void:
 #	prints(get_viewport().get_mouse_position(), temp_points)
 	tail_points = temp_points
 	
+	prints("tp", temp_points)

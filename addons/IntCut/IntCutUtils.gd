@@ -1,25 +1,43 @@
 extends Node
 class_name IntCutUtils
 
+func get_actor_top_center_screen_position(actor: Node2D) -> Vector2:
+	var spr := get_actor_sprite(actor)
+	var spr_rect := spr.get_rect()
+#	var cam_transform : Transform2D = spr.get_canvas_transform()
+	
+	var transform_diff = spr.get_global_transform_with_canvas().get_origin()\
+		+ spr_rect.position - Vector2(0, spr_rect.size.y/2)
+	
+	return transform_diff
+
 ## Translate a world position to a screen position
 func world_to_screen(world_coordinates: Vector2) -> Vector2:
-	var cam : Camera2D = get_viewport().get_camera_2d()
-	prints("campos", cam.global_position)
-	return world_coordinates - cam.global_position
+	var cam : Vector2 = get_tree().current_scene.get_canvas_transform().origin
+	prints("campos", cam)
+	return world_coordinates - cam
 
 ## get the top center point of an actor
 func get_actor_top_center(actor: Node2D) -> Vector2:
 	var spr := get_actor_rect(actor)
 	prints("spr", spr)
-	return spr.position + Vector2(0, -spr.size.y/2)
+	return spr.position + Vector2(0, -64)
 
 ## get an actor's rect
 func get_actor_rect(actor: Node2D) -> Rect2:
-	var spr := actor.get_node("Sprite2D") as Sprite2D
-	if !is_instance_valid(spr):
+	var spr := get_actor_sprite(actor)
+	if !spr:
 		return Rect2()
 	var r := spr.get_rect()
-	return Rect2(spr.to_global(r.position), r.size)
+	return Rect2(spr.to_global(r.position + r.size/2), r.size)
+
+## get an actor's rect
+func get_actor_sprite(actor: Node2D) -> Sprite2D:
+	var spr := actor.get_node("Sprite2D") as Sprite2D
+	if is_instance_valid(spr):
+		return spr
+	return null
+
 
 #func pos_in_cam(world_coordinates: Vector2) -> bool:
 #	var cam := get_viewport().get_camera_2d() as Camera2D
