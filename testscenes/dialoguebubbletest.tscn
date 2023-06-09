@@ -8,18 +8,19 @@
 script = ExtResource("1_m1g5f")
 actor = NodePath("TestActor")
 
-[node name="DialogueBubble" parent="." node_paths=PackedStringArray("speaker") instance=ExtResource("1_4ggul")]
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="DialogueBubble" parent="CanvasLayer" node_paths=PackedStringArray("speaker") instance=ExtResource("1_4ggul")]
 offset_left = 94.0
 offset_top = 67.0
 offset_right = 94.0
 offset_bottom = 67.0
 text = PackedStringArray("How\'s it going")
-speaker = NodePath("../TestActor")
+speaker = NodePath("../../TestActor")
 bubble_oscilate_speed = 500.0
 bubble_point_move_scale = 4
 
 [node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2(520, 264)
 
 [node name="TestActor" type="Node2D" parent="."]
 position = Vector2(112, 288)

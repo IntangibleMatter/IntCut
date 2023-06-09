@@ -21,7 +21,7 @@ var bubble_points : PackedVector2Array # Displayed points. Updates.
 ## Colour of the dialogue bubble.
 var bubble_colour := Color.BLACK
 ## Points used to draw the line between the speech bubble and the actor
-var speech_line_points : PackedVector2Array
+var tail_points : PackedVector2Array
 
 
 ## The template used to determine how the corners look.
@@ -80,13 +80,14 @@ var corner_points_template : Array[PackedVector2Array] = [
 ## Sets the maximum horizontal scale of the dialogue bubble.
 @export_range(0.2, 1) var maximum_box_size : float = 0.9
 ## Sets the maximum width of the speech bubble connector
-@export var maximum_speech_connector_width : float = 30
+@export var maximum_tail_width : float = 30
 
 
 @onready var rich_text_label = $RichTextLabel
 @onready var icutils := IntCutUtils.new()
 
 func _ready() -> void:
+	add_child(icutils)
 	bubble_rect = Rect2(calculate_bubble_location(), Vector2.ZERO)
 	calculate_bubble_points(bubble_rect)
 	rich_text_label.text =  "[center]" + text[0].replace("\\n", "\n")
@@ -98,7 +99,7 @@ func _process(delta: float) -> void:
 		rich_text_label.size = bubble_rect.size
 	rich_text_label.position = bubble_rect.position
 	update_bubble_points()
-	update_speech_line()
+	update_tail()
 	queue_redraw()
 
 
@@ -175,9 +176,9 @@ func draw_bubble() -> void:
 #	prints("bubble points", bubble_points)
 
 
-func draw_speech_line() -> void:
-	draw_colored_polygon(speech_line_points, bubble_colour)
-#	draw_polyline(speech_line_points, Color.WHITE, 4)
+func draw_tail() -> void:
+	draw_colored_polygon(tail_points, bubble_colour)
+#	draw_polyline(tail_points, Color.WHITE, 4)
 
 
 func _draw() -> void:
@@ -185,7 +186,7 @@ func _draw() -> void:
 		return
 #	prints("bubble points", bubble_points)
 #	print("drawing!")
-	draw_speech_line()
+	draw_tail()
 	draw_bubble()
 
 
@@ -246,19 +247,21 @@ func update_bubble_points() -> void:
 
 
 ## Updates the line between the actor and the dialogue bubble
-func update_speech_line() -> void:
+func update_tail() -> void:
 	var temp_points : PackedVector2Array
 	var rect_center := bubble_rect.get_center()
 	
-	temp_points.append(icutils.get_actor_top_center(speaker))
+	temp_points.append(await icutils.world_to_screen(icutils.get_actor_top_center(speaker)))
 #	temp_points.append(get_viewport().get_mouse_position() - get_viewport().get_final_transform().get_origin())
 	
-	if maximum_speech_connector_width * 2 > bubble_rect.size.x:
+	# Make it so they rotate to face the last point. Bit of trig to do, I guess.
+	
+	if maximum_tail_width * 2 > bubble_rect.size.x:
 		temp_points.append(rect_center - Vector2(bubble_rect.size.x/2, 0))
 		temp_points.append(rect_center + Vector2(bubble_rect.size.x/2, 0))
 	else:
-		temp_points.append(rect_center - Vector2(maximum_speech_connector_width, 0))
-		temp_points.append(rect_center + Vector2(maximum_speech_connector_width, 0))
+		temp_points.append(rect_center - Vector2(maximum_tail_width, 0))
+		temp_points.append(rect_center + Vector2(maximum_tail_width, 0))
 #	prints(get_viewport().get_mouse_position(), temp_points)
-	speech_line_points = temp_points
+	tail_points = temp_points
 	
