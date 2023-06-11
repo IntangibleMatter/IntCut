@@ -10,21 +10,22 @@ actor = NodePath("TestActor")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="DialogueBubble" parent="CanvasLayer" node_paths=PackedStringArray("speaker") instance=ExtResource("1_4ggul")]
+[node name="DialogueBubble" parent="CanvasLayer" node_paths=PackedStringArray("actor") instance=ExtResource("1_4ggul")]
 offset_left = 94.0
 offset_top = 67.0
 offset_right = 94.0
 offset_bottom = 67.0
 text = PackedStringArray("How\'s it going")
-speaker = NodePath("../../TestActor")
+actor = NodePath("../../TestActor")
 bubble_oscilate_speed = 500.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(662, 801)
-enabled = false
 
 [node name="TestActor" type="Node2D" parent="."]
+position = Vector2(208, 656)
 
 [node name="Sprite2D" type="Sprite2D" parent="TestActor"]
+z_index = -4
 texture = ExtResource("3_n0y7r")
 metadata/_edit_lock_ = true

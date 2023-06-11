@@ -6,8 +6,10 @@ func get_actor_top_center_screen_position(actor: Node2D) -> Vector2:
 	var spr_rect := spr.get_rect()
 #	var cam_transform : Transform2D = spr.get_canvas_transform()
 	
-	var transform_diff = spr.get_global_transform_with_canvas().get_origin()\
-		+ spr_rect.position - Vector2(0, spr_rect.size.y/2)
+	var transform_diff = spr.get_global_transform_with_canvas().get_origin()
+#		+ spr_rect.position# - Vector2(0, spr_rect.size.y/2)
+	
+	prints("gatcsp", spr, spr_rect, transform_diff)
 	
 	return transform_diff
 
@@ -21,7 +23,7 @@ func world_to_screen(world_coordinates: Vector2) -> Vector2:
 func get_actor_top_center(actor: Node2D) -> Vector2:
 	var spr := get_actor_rect(actor)
 	prints("spr", spr)
-	return spr.position + Vector2(0, -64)
+	return spr.position - Vector2(0, spr.size.y/2)
 
 ## get an actor's rect
 func get_actor_rect(actor: Node2D) -> Rect2:

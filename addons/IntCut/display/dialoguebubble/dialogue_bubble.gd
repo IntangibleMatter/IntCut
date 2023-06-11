@@ -63,7 +63,7 @@ var corner_points_template : Array[PackedVector2Array] = [
 ## Array of the text that will be displayed.
 @export var text : PackedStringArray
 ## The actor who is speaking.
-@export var speaker: Node2D
+@export var actor: Node2D
 ## Flag to determine positioning.
 @export var pos_flag : POS_FLAGS
 
@@ -156,7 +156,7 @@ func calculate_bubble_data() -> void:
 func calculate_bubble_location() -> Vector2:
 	return Vector2(20,20)
 	pass
-	var pos : Vector2 = icutils.get_actor_top_center(speaker)
+	var pos : Vector2 = icutils.get_actor_top_center(actor)
 	if pos_flag == POS_FLAGS.FORCE_BOTTOM or pos.y < icutils.get_cam_center(Vector2(0, -0.166)).y:
 		# put the dialogue box in the bottom half of the screen
 		pass
@@ -186,18 +186,9 @@ func _draw() -> void:
 		return
 #	prints("bubble points", bubble_points)
 #	print("drawing!")
-
-	
-	var spr := icutils.get_actor_sprite(speaker)
-	var spr_rect := spr.get_rect()
-	draw_colored_polygon([
-		spr.to_global(spr_rect.position),
-		spr.to_global(spr_rect.position) + Vector2(spr_rect.size.x, 0),
-		spr.to_global(spr_rect.position) + spr_rect.size,
-		spr.to_global(spr_rect.position) + Vector2(0, spr_rect.size.y)
-	], Color.DEEP_PINK)
 	draw_tail()
 	draw_bubble()
+	draw_circle(icutils.get_actor_top_center_screen_position(actor), 10, Color.GREEN)
 
 
 func offset_bubble_points(rect: Rect2) -> PackedVector2Array:
@@ -261,7 +252,7 @@ func update_tail() -> void:
 	var temp_points : PackedVector2Array
 	var rect_center := bubble_rect.get_center()
 	
-	temp_points.append(icutils.get_actor_top_center_screen_position(speaker))
+	temp_points.append(icutils.get_actor_top_center_screen_position(actor))
 #	temp_points.append(get_viewport().get_mouse_position() - get_viewport().get_final_transform().get_origin())
 	
 	# Make it so they rotate to face the last point. Bit of trig to do, I guess.
