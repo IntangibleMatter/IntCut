@@ -15,6 +15,7 @@ actor = NodePath("TestActor")
 [node name="Sprite2D" type="Sprite2D" parent="TestActor"]
 z_index = -4
 texture = ExtResource("3_c4pn0")
+metadata/_edit_lock_ = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
