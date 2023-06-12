@@ -259,16 +259,12 @@ func update_tail() -> void:
 	
 	# Make it so they rotate to face the last point. Bit of trig to do, I guess.
 	
-	var rotate_by := atan2(temp_points[0].x, -temp_points[0].y)
 	var tail_width = maximum_tail_width if maximum_tail_width * 2 < bubble_rect.size.x else bubble_rect.size.x / 2
-	
-	temp_points.append(Vector2(-tail_width, 0).rotated(rotate_by))
-	temp_points.append(Vector2(tail_width, 0).rotated(rotate_by))
-	
-	temp_points[1] += bubble_rect.get_center()
-	temp_points[2] += bubble_rect.get_center()
+	var dir = rect_center.direction_to(temp_points[0])
+	temp_points.append(dir.orthogonal()*tail_width+rect_center)
+	temp_points.append(dir.orthogonal()*-tail_width+rect_center)
 	
 #	prints(get_viewport().get_mouse_position(), temp_points)
 	tail_points = temp_points
 	
-	prints("tp", temp_points)
+#	prints("tp", temp_points)

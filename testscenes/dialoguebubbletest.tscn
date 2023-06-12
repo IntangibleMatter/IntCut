@@ -19,6 +19,6 @@ texture = ExtResource("3_c4pn0")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="DialogueBubble" parent="CanvasLayer" node_paths=PackedStringArray("actor") instance=ExtResource("1_4ggul")]
-text = PackedStringArray("[wave amp=30]oooooooooooops")
+text = PackedStringArray("[shake level=30]Thank you!")
 actor = NodePath("../../TestActor")
 bubble_oscilate_speed = 500.0
