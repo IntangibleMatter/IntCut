@@ -4,14 +4,14 @@ class_name IntCutUtils
 func get_actor_top_center_screen_position(actor: Node2D) -> Vector2:
 	var spr := get_actor_sprite(actor)
 	var spr_rect := spr.get_rect()
+	var spr_transform := spr.get_global_transform_with_canvas()
 #	var cam_transform : Transform2D = spr.get_canvas_transform()
 	
-	var transform_diff = spr.get_global_transform_with_canvas().get_origin()
-#		+ spr_rect.position# - Vector2(0, spr_rect.size.y/2)
+	var transform = spr_transform.get_origin() + (Vector2(0, spr_rect.position.y) * spr_transform.get_scale()).rotated(spr_transform.get_rotation())
 	
-	prints("gatcsp", spr, spr_rect, transform_diff)
+#	prints("gatcsp", spr_rect, transform, spr.global_position)
 	
-	return transform_diff
+	return transform
 
 ## Translate a world position to a screen position
 func world_to_screen(world_coordinates: Vector2) -> Vector2:
@@ -33,7 +33,7 @@ func get_actor_rect(actor: Node2D) -> Rect2:
 	var r := spr.get_rect()
 	return Rect2(spr.to_global(r.position + r.size/2), r.size)
 
-## get an actor's rect
+## get an actor's sprite
 func get_actor_sprite(actor: Node2D) -> Sprite2D:
 	var spr := actor.get_node("Sprite2D") as Sprite2D
 	if is_instance_valid(spr):

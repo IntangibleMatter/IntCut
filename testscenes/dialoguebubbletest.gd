@@ -38,20 +38,10 @@ func _process(delta: float) -> void:
 	elif Input.is_action_pressed("ui_page_down"):
 		camera_2d.zoom -= Vector2(0.1, 0.1)
 	
-	prints("actor", test_actor.get_child(0).global_position, test_actor.get_child(0).get_rect())
-	prints("cam", camera_2d.position)
+#	prints("actor", test_actor.get_child(0).global_position, test_actor.get_child(0).get_rect())
+#	prints("cam", camera_2d.position)
 
 
 func _draw() -> void:
-	var spr := icutils.get_actor_sprite(get_node(actor))
-	var spr_rect := spr.get_rect()
-	prints("sprect", spr_rect)
-	var debug_points : PackedVector2Array = [
-		spr.to_global(spr_rect.position),
-		spr.to_global(spr_rect.position) + Vector2(spr_rect.size.x, 0),
-		spr.to_global(spr_rect.position) + spr_rect.size,
-		spr.to_global(spr_rect.position) + Vector2(0, spr_rect.size.y)
-	]
-	prints("dp", debug_points, spr.global_position - spr_rect.position)
-	draw_colored_polygon(debug_points, Color(1, 0, 1, 0.5))
-	draw_circle(spr.to_global(spr_rect.get_center()), 10, Color.DARK_GREEN)
+	draw_circle(Vector2(-40, 0).rotated(Time.get_ticks_msec() / 1000.0 ), 10, Color.DARK_RED)
+	draw_circle(Vector2.ZERO, 5, Color.RED)

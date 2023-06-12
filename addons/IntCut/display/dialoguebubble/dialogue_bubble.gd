@@ -88,6 +88,8 @@ var corner_points_template : Array[PackedVector2Array] = [
 
 func _ready() -> void:
 	add_child(icutils)
+	if text.is_empty():
+		text.append("F")
 	bubble_rect = Rect2(calculate_bubble_location(), Vector2.ZERO)
 	calculate_bubble_points(bubble_rect)
 	rich_text_label.text =  "[center]" + text[0].replace("\\n", "\n")
@@ -109,8 +111,8 @@ func scale_dialogue_box() -> void:
 	rich_text_label.size.x = rich_text_label.get_content_width()
 	await get_tree().process_frame
 	rich_text_label.size.y = rich_text_label.get_content_height()
-	prints("init", rich_text_label.size)
-	prints("height", rich_text_label.get_content_height())
+#	prints("init", rich_text_label.size)
+#	prints("height", rich_text_label.get_content_height())
 	if rich_text_label.size.x > get_viewport_rect().size.x:
 		rich_text_label.size.x = get_viewport_rect().size.x * maximum_box_size
 		rich_text_label.size.x = rich_text_label.get_content_width()
@@ -154,7 +156,7 @@ func calculate_bubble_data() -> void:
 
 ## Calculate the location of the bubble on the screen.
 func calculate_bubble_location() -> Vector2:
-	return Vector2(20,20)
+	return Vector2(128,128)
 	pass
 	var pos : Vector2 = icutils.get_actor_top_center(actor)
 	if pos_flag == POS_FLAGS.FORCE_BOTTOM or pos.y < icutils.get_cam_center(Vector2(0, -0.166)).y:
@@ -188,7 +190,6 @@ func _draw() -> void:
 #	print("drawing!")
 	draw_tail()
 	draw_bubble()
-	draw_circle(icutils.get_actor_top_center_screen_position(actor), 10, Color.GREEN)
 
 
 func offset_bubble_points(rect: Rect2) -> PackedVector2Array:
@@ -253,16 +254,20 @@ func update_tail() -> void:
 	var rect_center := bubble_rect.get_center()
 	
 	temp_points.append(icutils.get_actor_top_center_screen_position(actor))
+#	prints("dbbor", temp_points[0])
 #	temp_points.append(get_viewport().get_mouse_position() - get_viewport().get_final_transform().get_origin())
 	
 	# Make it so they rotate to face the last point. Bit of trig to do, I guess.
 	
-	if maximum_tail_width * 2 > bubble_rect.size.x:
-		temp_points.append(rect_center - Vector2(bubble_rect.size.x/2, 0))
-		temp_points.append(rect_center + Vector2(bubble_rect.size.x/2, 0))
-	else:
-		temp_points.append(rect_center - Vector2(maximum_tail_width, 0))
-		temp_points.append(rect_center + Vector2(maximum_tail_width, 0))
+	var rotate_by := atan2(temp_points[0].x, -temp_points[0].y)
+	var tail_width = maximum_tail_width if maximum_tail_width * 2 < bubble_rect.size.x else bubble_rect.size.x / 2
+	
+	temp_points.append(Vector2(-tail_width, 0).rotated(rotate_by))
+	temp_points.append(Vector2(tail_width, 0).rotated(rotate_by))
+	
+	temp_points[1] += bubble_rect.get_center()
+	temp_points[2] += bubble_rect.get_center()
+	
 #	prints(get_viewport().get_mouse_position(), temp_points)
 	tail_points = temp_points
 	
