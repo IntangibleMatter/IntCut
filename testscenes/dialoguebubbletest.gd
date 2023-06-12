@@ -14,7 +14,7 @@ func _ready() -> void:
 	add_child(icutils)
 
 func _process(delta: float) -> void:
-	queue_redraw()
+#	queue_redraw()
 	if Input.is_action_pressed("ui_up"):
 		test_actor.position.y -= speed * delta
 	elif Input.is_action_pressed("ui_down"):
@@ -23,6 +23,11 @@ func _process(delta: float) -> void:
 		test_actor.position.x -= speed * delta
 	elif Input.is_action_pressed("ui_right"):
 		test_actor.position.x += speed * delta
+	
+	if Input.is_action_pressed("ui_accept"):
+		test_actor.rotation -= delta
+	elif Input.is_action_pressed("ui_cancel"):
+		test_actor.rotation += delta
 	
 	if Input.is_action_pressed("w"):
 		camera_2d.position.y -= speed * delta
@@ -40,8 +45,8 @@ func _process(delta: float) -> void:
 	
 #	prints("actor", test_actor.get_child(0).global_position, test_actor.get_child(0).get_rect())
 #	prints("cam", camera_2d.position)
-
-
-func _draw() -> void:
-	draw_circle(Vector2(-40, 0).rotated(Time.get_ticks_msec() / 1000.0 ), 10, Color.DARK_RED)
-	draw_circle(Vector2.ZERO, 5, Color.RED)
+#
+#
+#func _draw() -> void:
+#	draw_circle(Vector2(-40, 0).rotated(Time.get_ticks_msec() / 1000.0 ), 10, Color.DARK_RED)
+#	draw_circle(Vector2.ZERO, 5, Color.RED)

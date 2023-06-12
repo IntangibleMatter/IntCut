@@ -1,6 +1,36 @@
 extends Node
 class_name IntCutUtils
 
+func get_actor_closest_dialogue_screen_position(actor: Node2D, point: Vector2) -> Vector2:
+	var spr := get_actor_sprite(actor)
+	var spr_rect := spr.get_rect()
+	var spr_transform := spr.get_global_transform_with_canvas()
+	
+	var potential_points : PackedVector2Array
+	
+	var points_of_box : PackedVector2Array = [
+		(spr_transform.get_origin() + spr_rect.position.rotated(spr_transform.get_rotation()) * spr_transform.get_scale()),
+		(spr_transform.get_origin() + (spr_rect.position + Vector2(spr_rect.size.x, 0)).rotated(spr_transform.get_rotation()) * spr_transform.get_scale()),
+		(spr_transform.get_origin() + (spr_rect.position + spr_rect.size).rotated(spr_transform.get_rotation()) * spr_transform.get_scale()),
+		(spr_transform.get_origin() + (spr_rect.position + Vector2(0, spr_rect.size.y)).rotated(spr_transform.get_rotation()) * spr_transform.get_scale()),
+	]
+	
+	prints("bp", points_of_box)
+	
+	for i in points_of_box.size():
+		potential_points.append(Geometry2D.get_closest_point_to_segment(point, points_of_box[i - 1], points_of_box[i]))
+	
+	var final_point : Vector2
+	var closest_distance : float = INF
+	
+	for p in potential_points:
+		var dsquared := point.distance_squared_to(p)
+		if dsquared < closest_distance:
+			closest_distance = dsquared
+			final_point = p
+	
+	return final_point
+
 func get_actor_top_center_screen_position(actor: Node2D) -> Vector2:
 	var spr := get_actor_sprite(actor)
 	var spr_rect := spr.get_rect()

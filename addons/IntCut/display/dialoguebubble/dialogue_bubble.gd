@@ -253,18 +253,12 @@ func update_tail() -> void:
 	var temp_points : PackedVector2Array
 	var rect_center := bubble_rect.get_center()
 	
-	temp_points.append(icutils.get_actor_top_center_screen_position(actor))
-#	prints("dbbor", temp_points[0])
-#	temp_points.append(get_viewport().get_mouse_position() - get_viewport().get_final_transform().get_origin())
-	
-	# Make it so they rotate to face the last point. Bit of trig to do, I guess.
+	temp_points.append(icutils.get_actor_closest_dialogue_screen_position(actor, rect_center))
 	
 	var tail_width = maximum_tail_width if maximum_tail_width * 2 < bubble_rect.size.x else bubble_rect.size.x / 2
 	var dir = rect_center.direction_to(temp_points[0])
 	temp_points.append(dir.orthogonal()*tail_width+rect_center)
 	temp_points.append(dir.orthogonal()*-tail_width+rect_center)
 	
-#	prints(get_viewport().get_mouse_position(), temp_points)
 	tail_points = temp_points
-	
-#	prints("tp", temp_points)
+
