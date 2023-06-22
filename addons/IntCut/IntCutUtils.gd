@@ -2,20 +2,11 @@ extends Node
 class_name IntCutUtils
 
 func get_actor_closest_dialogue_screen_position(actor: Node2D, point: Vector2) -> Vector2:
-	var spr := get_actor_sprite(actor)
-	var spr_rect := spr.get_rect()
-	var spr_transform := spr.get_global_transform_with_canvas()
-	
 	var potential_points : PackedVector2Array
 	
-	var points_of_box : PackedVector2Array = [
-		(spr_transform.get_origin() + spr_rect.position.rotated(spr_transform.get_rotation()) * spr_transform.get_scale()),
-		(spr_transform.get_origin() + (spr_rect.position + Vector2(spr_rect.size.x, 0)).rotated(spr_transform.get_rotation()) * spr_transform.get_scale()),
-		(spr_transform.get_origin() + (spr_rect.position + spr_rect.size).rotated(spr_transform.get_rotation()) * spr_transform.get_scale()),
-		(spr_transform.get_origin() + (spr_rect.position + Vector2(0, spr_rect.size.y)).rotated(spr_transform.get_rotation()) * spr_transform.get_scale()),
-	]
+	var points_of_box := get_actor_screen_box_points(actor)
 	
-	prints("bp", points_of_box)
+	#prints("bp", points_of_box)
 	
 	for i in points_of_box.size():
 		potential_points.append(Geometry2D.get_closest_point_to_segment(point, points_of_box[i - 1], points_of_box[i]))
@@ -31,17 +22,43 @@ func get_actor_closest_dialogue_screen_position(actor: Node2D, point: Vector2) -
 	
 	return final_point
 
-func get_actor_top_center_screen_position(actor: Node2D) -> Vector2:
+
+func get_actor_screen_bounding_rect(actor: Node2D) -> Rect2:
+	var actor_box_points := get_actor_screen_box_points(actor)
+#	prints("unsorted", actor_box_points)
+	actor_box_points.sort()
+#	prints("sorted", actor_box_points)
+	var bounding := Rect2()
+	var left := actor_box_points[0].x
+	var right := actor_box_points[-1].x
+	var top : float = 999999
+	var bottom : float = -999999
+	
+	for point in actor_box_points:
+		if point.y < top:
+			top = point.y
+		if point.y > bottom:
+			bottom = point.y
+	
+	bounding.position = Vector2(left, top)
+	bounding.size = Vector2(right, bottom) - bounding.position
+	
+	prints("bounding", bounding, top, left, bottom, right)
+	return bounding
+
+
+func get_actor_screen_box_points(actor: Node2D) -> PackedVector2Array:
 	var spr := get_actor_sprite(actor)
 	var spr_rect := spr.get_rect()
 	var spr_transform := spr.get_global_transform_with_canvas()
-#	var cam_transform : Transform2D = spr.get_canvas_transform()
-	
-	var transform = spr_transform.get_origin() + (Vector2(0, spr_rect.position.y) * spr_transform.get_scale()).rotated(spr_transform.get_rotation())
-	
-#	prints("gatcsp", spr_rect, transform, spr.global_position)
-	
-	return transform
+	var points_of_box : PackedVector2Array = [
+		(spr_transform.get_origin() + spr_rect.position.rotated(spr_transform.get_rotation()) * spr_transform.get_scale()),
+		(spr_transform.get_origin() + (spr_rect.position + Vector2(spr_rect.size.x, 0)).rotated(spr_transform.get_rotation()) * spr_transform.get_scale()),
+		(spr_transform.get_origin() + (spr_rect.position + spr_rect.size).rotated(spr_transform.get_rotation()) * spr_transform.get_scale()),
+		(spr_transform.get_origin() + (spr_rect.position + Vector2(0, spr_rect.size.y)).rotated(spr_transform.get_rotation()) * spr_transform.get_scale()),
+	]
+	return points_of_box
+
 
 ## Translate a world position to a screen position
 func world_to_screen(world_coordinates: Vector2) -> Vector2:

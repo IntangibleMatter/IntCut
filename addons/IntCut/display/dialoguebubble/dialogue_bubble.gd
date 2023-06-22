@@ -113,7 +113,7 @@ func scale_dialogue_box() -> void:
 	rich_text_label.size.y = rich_text_label.get_content_height()
 #	prints("init", rich_text_label.size)
 #	prints("height", rich_text_label.get_content_height())
-	if rich_text_label.size.x > get_viewport_rect().size.x:
+	if rich_text_label.size.x > get_viewport_rect().size.x * maximum_box_size:
 		rich_text_label.size.x = get_viewport_rect().size.x * maximum_box_size
 		rich_text_label.size.x = rich_text_label.get_content_width()
 		await get_tree().process_frame
@@ -187,6 +187,7 @@ func _draw() -> void:
 	if bubble_points.is_empty():
 		return
 #	prints("bubble points", bubble_points)
+	draw_rect(icutils.get_actor_screen_bounding_rect(actor), Color.RED)
 #	print("drawing!")
 	draw_tail()
 	draw_bubble()

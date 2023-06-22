@@ -48,13 +48,13 @@ func end_scene() -> void: # actor_states: Dictionary = {}) -> void:
 ## position information.
 ## `duration` is used to automatically advance dialogue after a certain amount
 ## of time. If it's -1 (the default) it'll stay open indefinitely.
-func say(actor: String, line: String, continues: bool = false, pos: int = 0, callables: Array[Callable] = [], duration: float = -1) -> void: # duration is used for non-main cutscenes or interrupted dialogue.
+func say(actor: String, line: String, pos: int = 0, callables: Array[Callable] = []) -> void: # duration is used for non-main cutscenes or interrupted dialogue.
 	pass
 	if verify_actor(actor):
 #		var dialogue_continues : bool = next_say_is_by_actor(actor)
 		# pass the dialogue along to the dialogue engine
 #		if action.size() == 4:
-		CutsceneDisplay.say(actors[actor], format_dialogue(line), continues, pos, callables, duration)
+		CutsceneDisplay.say(actors[actor], format_dialogue(line), pos, callables)
 
 
 		# We need to wait until the dialogue line is done so they don't just
@@ -62,13 +62,13 @@ func say(actor: String, line: String, continues: bool = false, pos: int = 0, cal
 
 
 
-func say_multi(actor: String, lines: PackedStringArray, continues: bool = false, pos: PackedInt32Array = [], duration: float = -1): # duration is used for non-main cutscenes or interrupted dialogue.
-	pass
+#func say_multi(actor: String, lines: PackedStringArray, pos: PackedInt32Array = [] callables: Array[Callable]): # duration is used for non-main cutscenes or interrupted dialogue.
+func say_multi(actor: String, lines: PackedStringArray, pos: PackedInt32Array, callables: Array[Callable]) -> void:
 	if verify_actor(actor):
 #		var dialogue_continues : bool = next_say_is_by_actor(actor)
 		# pass the dialogue along to the dialogue engine
 #		if action.size() == 4:
-		CutsceneDisplay.say_multi(actors[actor], PackedStringArray(Array(lines).map(Callable(self, "format_dialogue"))), continues, pos, duration)
+		CutsceneDisplay.say_multi(actors[actor], PackedStringArray(Array(lines).map(Callable(self, "format_dialogue"))), pos, callables)
 
 
 		# We need to wait until the dialogue line is done so they don't just

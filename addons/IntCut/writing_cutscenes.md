@@ -1,3 +1,4 @@
+
 # Writing Cutscenes
 
 ## Making a new cutscene
@@ -29,13 +30,13 @@ There are some character that IntCut treats differently for various reasons.
 The following is a list of the characters and what they do.
 
 - `\n`
-    - the string `\n` (or just a regular newline) will be seen as a newline by 
-    IntCut's text parser.
+	- the string `\n` (or just a regular newline) will be seen as a newline by 
+	IntCut's text parser.
 - `|`
-    - The pipe character (`|`) is used to represent a pause in the dialogue.
-    The pause is 0.1 seconds long, so if you had a dialogue line which was
-    written as `"Oh...||| I see."`, there would be a 0.3 second pause after
-    the elipsis.
+	- The pipe character (`|`) is used to represent a pause in the dialogue.
+	The pause is 0.1 seconds long, so if you had a dialogue line which was
+	written as `"Oh...||| I see."`, there would be a 0.3 second pause after
+	the elipsis.
 - `` ` ``
 	- the backtick character (`` ` ``) is used to separate a single message
 	into multiple messages. Primarily aimed at translations, but could make
@@ -79,24 +80,24 @@ say("Whoa... that's... {0}{1} really funny, dude!", [Callable(play_sound, "laugh
 **params**
 
 - actor: String
-    - The string used to refer to the actor in the cutscene.
+	- The string used to refer to the actor in the cutscene.
 - line: String
-    - The translation key for the line
+	- The translation key for the line
 - continues: bool = false
-    - Sets whether the dialogue box should stay open after this line. Super
-    janky solution to solve the problem of continuing the same dialogue.
+	- Sets whether the dialogue box should stay open after this line. Super
+	janky solution to solve the problem of continuing the same dialogue.
 - pos: int = 0
-    - Sets any position display flags for the dialogue box. 0 is default.
-        - 0 -> automatic positioning
-        - 1 -> force box to top
-        - 2 -> force box to bottom
+	- Sets any position display flags for the dialogue box. 0 is default.
+		- 0 -> automatic positioning
+		- 1 -> force box to top
+		- 2 -> force box to bottom
 - callables: Array[Callable]
-    - An array of callables. They can be triggered at any point in the 
-    dialogue. If you want to bypass this option, set it to an empty array.
+	- An array of callables. They can be triggered at any point in the 
+	dialogue. If you want to bypass this option, set it to an empty array.
 - duration: float = -1
-    - Sets the dration that the dialogue bubble will be open. Used for dialogue
-    which progresses automatically, is interrupted, or is part of a non-player
-    controlled cutscene.
+	- Sets the dration that the dialogue bubble will be open. Used for dialogue
+	which progresses automatically, is interrupted, or is part of a non-player
+	controlled cutscene.
 
 #### choice
 
@@ -105,11 +106,11 @@ Gives a choice to the user. Can split in any number of directions.
 **params**
 
 - choices: Array[Dictionary]
-    - dictionary must have the following format:
-        - `{tr_string: string, label: string}`
-            - tr_string is the translation string used for the dialogue option
-            - label is the label which will be jumped to if the choice is
-            selected
+	- dictionary must have the following format:
+		- `{tr_string: string, label: string}`
+			- tr_string is the translation string used for the dialogue option
+			- label is the label which will be jumped to if the choice is
+			selected
 
 ### Flow
 
@@ -122,6 +123,6 @@ Moves control flow to another function in the cutscene.
 **params**
 
 - label: String
-    - the name of the function to jump to
+	- the name of the function to jump to
 
 

@@ -8,6 +8,8 @@ extends Node2D
 
 @onready var icutils := IntCutUtils.new()
 
+#var bounding : Rect2
+
 var speed = 400
 
 func _ready() -> void:
@@ -43,10 +45,8 @@ func _process(delta: float) -> void:
 	elif Input.is_action_pressed("ui_page_down"):
 		camera_2d.zoom -= Vector2(0.1, 0.1)
 	
+	
 #	prints("actor", test_actor.get_child(0).global_position, test_actor.get_child(0).get_rect())
 #	prints("cam", camera_2d.position)
 #
 #
-#func _draw() -> void:
-#	draw_circle(Vector2(-40, 0).rotated(Time.get_ticks_msec() / 1000.0 ), 10, Color.DARK_RED)
-#	draw_circle(Vector2.ZERO, 5, Color.RED)
