@@ -15,6 +15,7 @@ z_index = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="TestActor"]
 z_index = -4
+texture_filter = 3
 texture = ExtResource("2_hbtxl")
 metadata/_edit_lock_ = true
 
@@ -22,7 +23,7 @@ metadata/_edit_lock_ = true
 layer = -1
 
 [node name="DialogueBubble" parent="CanvasLayer" node_paths=PackedStringArray("actor") instance=ExtResource("1_4ggul")]
-text = PackedStringArray("[tornado radius=10 freq=10]you\'re gonna have a wiggly time")
+text = PackedStringArray("[font_size=200] [/font_size][wave amp=1000]Testing this shit[/wave]")
 actor = NodePath("../../TestActor")
 bubble_oscilate_speed = 500.0
 maximum_box_size = 0.4

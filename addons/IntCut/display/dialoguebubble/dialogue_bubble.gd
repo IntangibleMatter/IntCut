@@ -81,7 +81,10 @@ var corner_points_template : Array[PackedVector2Array] = [
 @export_range(0.2, 1) var maximum_box_size : float = 0.9
 ## Sets the maximum width of the speech bubble connector
 @export var maximum_tail_width : float = 30
-
+## sets the minimum padding (in pixels) from the screen edge
+@export var screen_padding : float = 64
+## sets the minimum padding (in pixels) from a speaking actor
+@export var actor_padding : float = 64
 
 @onready var rich_text_label = $RichTextLabel
 @onready var icutils := IntCutUtils.new()
