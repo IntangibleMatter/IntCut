@@ -110,6 +110,7 @@ func _process(delta: float) -> void:
 
 ## Scales the dialogue box to the new text size.
 func scale_dialogue_box() -> void:
+	print("SDFUIAHDSKFDJK")
 	scaling = true
 	rich_text_label.size.x = rich_text_label.get_content_width()
 	await get_tree().process_frame
@@ -159,9 +160,10 @@ func calculate_bubble_data() -> void:
 
 ## Calculate the location of the bubble on the screen.
 func calculate_bubble_location() -> Vector2:
-	return Vector2(128,128)
-	pass
-	var pos : Vector2 = icutils.get_actor_top_center(actor)
+	
+	var bounding := icutils.get_actor_screen_bounding_rect(actor)
+	return Vector2(bounding.get_center().x - bubble_rect.size.x/2, bounding.position.y - actor_padding - bubble_rect.size.y)
+	var pos
 	if pos_flag == POS_FLAGS.FORCE_BOTTOM or pos.y < icutils.get_cam_center(Vector2(0, -0.166)).y:
 		# put the dialogue box in the bottom half of the screen
 		pass

@@ -23,7 +23,8 @@ metadata/_edit_lock_ = true
 layer = -1
 
 [node name="DialogueBubble" parent="CanvasLayer" node_paths=PackedStringArray("actor") instance=ExtResource("1_4ggul")]
-text = PackedStringArray("[font_size=200] [/font_size][wave amp=1000]Testing this shit[/wave]")
+text = PackedStringArray("What the fuck did you just fucking say about me, you little bitch? I\'ll have you know I graduated top of my class in the Navy Seals, and I\'ve been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I\'m the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker.")
 actor = NodePath("../../TestActor")
 bubble_oscilate_speed = 500.0
-maximum_box_size = 0.4
+maximum_box_size = 0.6
+actor_padding = 128.0

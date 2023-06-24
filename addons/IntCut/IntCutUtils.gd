@@ -43,7 +43,7 @@ func get_actor_screen_bounding_rect(actor: Node2D) -> Rect2:
 	bounding.position = Vector2(left, top)
 	bounding.size = Vector2(right, bottom) - bounding.position
 	
-	prints("bounding", bounding, top, left, bottom, right)
+#	prints("bounding", bounding, top, left, bottom, right)
 	return bounding
 
 

@@ -45,6 +45,8 @@ func _process(delta: float) -> void:
 	elif Input.is_action_pressed("ui_page_down"):
 		camera_2d.zoom -= Vector2(0.1, 0.1)
 	
+	if Input.is_action_just_pressed("ui_home"):
+		dialogue_bubble.scale_dialogue_box()
 	
 #	prints("actor", test_actor.get_child(0).global_position, test_actor.get_child(0).get_rect())
 #	prints("cam", camera_2d.position)
