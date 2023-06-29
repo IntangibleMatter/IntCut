@@ -60,6 +60,12 @@ func get_actor_screen_box_points(actor: Node2D) -> PackedVector2Array:
 	return points_of_box
 
 
+func is_rect_on_screen(rect: Rect2) -> bool:
+	var cam : Rect2 = get_viewport().get_visible_rect()
+	prints("rect", cam)
+	return rect.intersects(cam)
+
+
 ## Translate a world position to a screen position
 func world_to_screen(world_coordinates: Vector2) -> Vector2:
 	var cam : Vector2 = get_tree().current_scene.get_canvas_transform().origin

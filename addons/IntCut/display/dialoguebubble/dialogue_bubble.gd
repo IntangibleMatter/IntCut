@@ -96,6 +96,7 @@ func _ready() -> void:
 	bubble_rect = Rect2(calculate_bubble_location(), Vector2.ZERO)
 	calculate_bubble_points(bubble_rect)
 	rich_text_label.text =  "[center]" + text[0].replace("\\n", "\n")
+#	await get_tree().process_frame
 	scale_dialogue_box()
 
 func _process(delta: float) -> void:
@@ -126,7 +127,8 @@ func scale_dialogue_box() -> void:
 	
 	await get_tree().process_frame
 	var tween := create_tween().set_parallel(true)
-	var new_rect : Rect2 = Rect2(calculate_bubble_location(), rich_text_label.size)
+	var new_rect : Rect2 = Rect2(Vector2.ZERO, rich_text_label.size)
+	new_rect.position = calculate_bubble_location(new_rect)
 	tween.tween_property(self, "bubble_rect", new_rect, 0.4)
 	tween.tween_method(calculate_bubble_points, bubble_rect, new_rect, 0.4)
 	tween.set_parallel(false)
@@ -159,12 +161,13 @@ func calculate_bubble_data() -> void:
 	calculate_bubble_location()
 
 ## Calculate the location of the bubble on the screen.
-func calculate_bubble_location() -> Vector2:
-	
+func calculate_bubble_location(bubb_rect: Rect2 = Rect2()) -> Vector2:
 	var bounding := icutils.get_actor_screen_bounding_rect(actor)
-	return Vector2(bounding.get_center().x - bubble_rect.size.x/2, bounding.position.y - actor_padding - bubble_rect.size.y)
+	var b_rect = bubble_rect if bubb_rect == Rect2() else bubb_rect
+	prints("berepelpl", icutils.is_rect_on_screen(bounding))
+	return Vector2(bounding.get_center().x - b_rect.size.x/2, bounding.position.y - actor_padding - b_rect.size.y)
 	var pos
-	if pos_flag == POS_FLAGS.FORCE_BOTTOM or pos.y < icutils.get_cam_center(Vector2(0, -0.166)).y:
+	if pos_flag == POS_FLAGS.FORCE_BOTTOM:
 		# put the dialogue box in the bottom half of the screen
 		pass
 	else:
